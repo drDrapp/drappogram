@@ -1,11 +1,15 @@
 <#import "parts/commonPart.ftlh" as c>
 <@c.page>
-    ${myvars!}
-    <h5>hello,
+    <h4>
+        привет,
         <#if dgUserRoles??>
-            <#if dgUserRoles?seq_contains("ADMIN")>master</#if>
+            <#if dgUserRoles?seq_contains("ADMIN")>
+                <span class="badge text-bg-warning">мастер</span>
+            </#if>
         </#if>
-        <#if dgUserName??>${dgUserName}<#else>guest</#if>!
-    </h5>
-    <div>welcome to drappogram</div>
+        <#if dgUserName??>${dgUserName}<#else>бродяга!</#if>!
+    </h4>
+    <h2>
+        <span class="badge text-bg-secondary">welcome to drappogram</span>
+    </h2>
 </@c.page>

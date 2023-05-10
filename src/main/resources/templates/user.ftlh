@@ -1,18 +1,23 @@
 <#import "parts/commonPart.ftlh" as c>
 
 <@c.page>
-    <div>User list</div>
-    <table>
+    <h2>
+        <span class="badge text-bg-secondary">Список пользователей</span>
+    </h2>
+    <table class="table table-striped">
+        <thead>
         <tr>
-            <th>Login</th>
-            <th>Firstname</th>
-            <th>Lastname</th>
-            <th>State</th>
-            <th>Roles</th>
-            <th>Commands</th>
+            <th scope="col">Логин</th>
+            <th scope="col">Имя</th>
+            <th scope="col">Фамилия</th>
+            <th scope="col">Статус</th>
+            <th scope="col">Роли</th>
+            <th scope="col">Управление</th>
         </tr>
+        </thead>
+        <tbody>
         <#list userList as dgUser>
-            <tr>
+            <tr scope="row">
                 <td>${dgUser.login}</td>
                 <td>${dgUser.firstName!}</td>
                 <td>${dgUser.lastName!}</td>
@@ -21,5 +26,6 @@
                 <td><a href="/user/${dgUser.id}">Edit</a></td>
             </tr>
         </#list>
+        </tbody>
     </table>
 </@c.page>
