@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface DgUserRepository extends JpaRepository<DgUser, Long> {
     List<DgUser> findAllByFirstName(String firstName);
     Optional<DgUser> findOneByLogin(String login);
+    DgUser findByActivationCode(String activationCode);
 }

@@ -30,6 +30,9 @@ public class DgUser {
     @Enumerated(value = EnumType.STRING)
     private State state;
 
+    private String email;
+    private String activationCode;
+
     public boolean isAdmin() {
         return roles.contains(Role.ADMIN);
     }

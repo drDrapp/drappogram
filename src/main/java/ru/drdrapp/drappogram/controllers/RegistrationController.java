@@ -2,6 +2,7 @@ package ru.drdrapp.drappogram.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ru.drdrapp.drappogram.froms.UserForm;
@@ -30,11 +31,22 @@ public class RegistrationController {
     public ModelAndView addUser(UserForm userForm, ModelAndView model) {
         Optional<DgUser> dgUserCandidate = dgUserRepository.findOneByLogin(userForm.getLogin());
         if (dgUserCandidate.isPresent()) {
-            model.addObject("message", "User exists!");
+            model.addObject("message", "Такой пользователь существует!");
             return model;
         }
         registrationService.registration(userForm);
         return new ModelAndView("/login");
+    }
+
+    @GetMapping("/activate/{code}")
+    public ModelAndView activate(ModelAndView model, @PathVariable String code) {
+        boolean isActivated = registrationService.activateUser(code);
+        if (isActivated) {
+            model.addObject("message", "Активация пользователя успешно завершена!");
+        } else {
+            model.addObject("message", "Пользователь с таким кодом активации не найден!");
+        }
+        return new ModelAndView("login", model.getModelMap());
     }
 
 }

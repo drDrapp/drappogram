@@ -9,15 +9,28 @@ import ru.drdrapp.drappogram.models.State;
 import ru.drdrapp.drappogram.repositories.DgUserRepository;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
     private final DgUserRepository dgUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final MailSender mailSender;
 
-    public RegistrationServiceImpl(DgUserRepository dgUserRepository, PasswordEncoder passwordEncoder) {
-        this.dgUserRepository = dgUserRepository;
+    public RegistrationServiceImpl(PasswordEncoder passwordEncoder, MailSender mailSender, DgUserRepository dgUserRepository) {
         this.passwordEncoder = passwordEncoder;
+        this.mailSender = mailSender;
+        this.dgUserRepository = dgUserRepository;
+    }
+
+    public boolean activateUser(String code) {
+        DgUser dgUser = dgUserRepository.findByActivationCode(code);
+        if (dgUser == null) {
+            return false;
+        }
+        dgUser.setActivationCode(null);
+        dgUserRepository.save(dgUser);
+        return true;
     }
 
     @Override
@@ -28,7 +41,19 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .hashPassword(hashPassword)
                 .roles(Collections.singleton(Role.USER))
                 .state(State.ACTIVE)
+                .email(userForm.getEmail())
+                .activationCode(UUID.randomUUID().toString())
                 .build();
         dgUserRepository.save(dgUser);
+        if (!dgUser.getEmail().isEmpty()) {
+            String message = String.format(
+                    "Привет, %s! \n" +
+                            "Добро пожаловать в drappogram! \n" +
+                            "Ссылка для активации: http://localhost:8080/activate/%s",
+                    dgUser.getLogin(),
+                    dgUser.getActivationCode()
+            );
+            mailSender.sendMail(dgUser.getEmail(), "Код активации для drappogram", message);
+        }
     }
 }

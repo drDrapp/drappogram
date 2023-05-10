@@ -15,7 +15,7 @@ public class LoginController {
     public ModelAndView getLoginPage(ModelAndView model, HttpServletRequest request) {
         LOGGER.debug(">>> Login controller");
         if (request.getParameterMap().containsKey("error")) {
-            model.addObject("message", "Invalid login or password!");
+            model.addObject("message", "Ошибка ввода логина или пароля!");
         }
         return model;
     }

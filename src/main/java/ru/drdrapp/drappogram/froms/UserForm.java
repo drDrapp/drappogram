@@ -8,4 +8,5 @@ import lombok.Setter;
 public class UserForm {
     private String login;
     private String password;
+    private String email;
 }

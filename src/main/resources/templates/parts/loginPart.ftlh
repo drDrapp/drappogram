@@ -1,6 +1,6 @@
 <#macro login path isRegisterForm>
     <form action="${path}" method="post">
-        <div class="row p-2 g-3 align-items-center">
+        <div class="row p-1 align-items-center">
             <div class="col-auto">
                 <label class="col-form-label" for="inputLogin">Логин :</label>
             </div>
@@ -12,7 +12,7 @@
                        placeholder="Логин"/>
             </div>
         </div>
-        <div class="row p-2 g-3 align-items-center">
+        <div class="row p-1 align-items-center">
             <div class="col-auto">
                 <label class="col-form-label" for="inputPassword">Пароль:</label>
             </div>
@@ -24,8 +24,22 @@
                        placeholder="Пароль"/>
             </div>
         </div>
-        <div class="row p-2 g-3 align-items-center">
-            <div class="row col-2 p-2">
+        <#if isRegisterForm>
+            <div class="row p-1 align-items-center">
+                <div class="col-auto">
+                    <label class="col-form-label" for="inputEmail">E-Mail:</label>
+                </div>
+                <div class="col-auto">
+                    <input class="form-control"
+                           type="email"
+                           name="email"
+                           id="inputEmail"
+                           placeholder="e-mail"/>
+                </div>
+            </div>
+        </#if>
+        <div class="row p-1 align-items-center">
+            <div class="col">
                 <button class="btn btn-warning"
                         type="submit">
                     <#if isRegisterForm>
@@ -37,13 +51,15 @@
             </div>
         </div>
         <#if isRegisterForm><#else>
-            <div class="row p-2">
-                <div class="form-check">
-                    <label for="remember-me">Запомнить меня</label>
-                    <input class="form-check-input"
-                           type="checkbox"
-                           id="remember-me"
-                           name="remember-me">
+            <div class="row p-1 align-items-center">
+                <div class="col">
+                    <div class="form-check">
+                        <label for="remember-me">Запомнить меня</label>
+                        <input class="form-check-input"
+                               type="checkbox"
+                               id="remember-me"
+                               name="remember-me">
+                    </div>
                 </div>
             </div>
         </#if>

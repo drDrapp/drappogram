@@ -1,14 +1,17 @@
 <#import "parts/commonPart.ftlh" as c>
 <@c.page>
     <form method="get" action="/main">
-        <div class="row p-2 g-3 align-items-center">
+        <div class="row p-1 align-items-center">
+            <div class="col-auto">
+                <label for="inputTagFilter">Поиск по тегу</label>
+            </div>
             <div class="col-auto">
                 <input class="form-control"
                        type="text"
                        name="tagFilter"
                        id="inputTagFilter"
                        value="${tagFilter!}"
-                       placeholder="Поиск по тегу">
+                       placeholder="Введите тег">
             </div>
             <div class="col-auto">
                 <button type="submit"
@@ -60,7 +63,7 @@
         </form>
     </div>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
+    <div class="row row-cols-1 row-cols-md-3 g-2">
         <#list dgMessages as message>
             <div class="col">
                 <div class="card h-100">
