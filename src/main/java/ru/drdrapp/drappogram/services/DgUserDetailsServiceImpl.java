@@ -1,7 +1,6 @@
 package ru.drdrapp.drappogram.services;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,7 +18,7 @@ public class DgUserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public DgUserDetailsImpl loadUserByUsername(String login) throws UsernameNotFoundException {
         return new DgUserDetailsImpl(dgUserRepository.findOneByLogin(login).orElseThrow(IllegalArgumentException::new));
     }
 

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:fragment="fr_page (content)">
+<head th:replace="~{fragments/pageParts :: fr_head}"><title>title</title></head>
+<body>
+<header th:replace="~{fragments/pageParts :: fr_header}"></header>
+<div class="container mt-8">
+    <section th:replace="${content}"></section>
+</div>
+<footer th:replace="~{fragments/pageParts :: fr_footter}"></footer>
+</body>
+</html>

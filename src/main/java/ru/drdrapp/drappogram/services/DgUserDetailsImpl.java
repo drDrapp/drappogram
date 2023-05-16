@@ -7,6 +7,7 @@ import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.State;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public record DgUserDetailsImpl(DgUser dgUser) implements UserDetails {
@@ -45,4 +46,21 @@ public record DgUserDetailsImpl(DgUser dgUser) implements UserDetails {
     public boolean isEnabled() {
         return dgUser.getState().equals(State.ACTIVE);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (DgUserDetailsImpl) obj;
+        return Objects.equals(this.dgUser, that.dgUser);
+    }
+
+    @Override
+    public String toString() {
+        return "Custom user detail["
+                + dgUser.getLastName() + ' '
+                + dgUser.getFirstName() + ' '
+                + dgUser.getEmail() + ']';
+    }
+
 }

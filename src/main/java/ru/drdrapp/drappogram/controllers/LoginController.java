@@ -12,7 +12,8 @@ public class LoginController {
     private static final Logger LOGGER  = LoggerFactory.getLogger(LoginController.class);
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(ModelAndView model, HttpServletRequest request) {
+    public ModelAndView getLoginPage(HttpServletRequest request) {
+        ModelAndView model = new ModelAndView("login");
         LOGGER.debug(">>> Login controller");
         if (request.getParameterMap().containsKey("error")) {
             model.addObject("message", "Ошибка ввода логина или пароля!");

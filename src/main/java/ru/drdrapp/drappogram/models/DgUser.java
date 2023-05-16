@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,9 +31,5 @@ public class DgUser {
 
     private String email;
     private String activationCode;
-
-    public boolean isAdmin() {
-        return roles.contains(Role.ADMIN);
-    }
 
 }

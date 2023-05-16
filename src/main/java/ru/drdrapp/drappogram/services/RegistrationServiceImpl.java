@@ -47,9 +47,10 @@ public class RegistrationServiceImpl implements RegistrationService {
         dgUserRepository.save(dgUser);
         if (!dgUser.getEmail().isEmpty()) {
             String message = String.format(
-                    "Привет, %s! \n" +
-                            "Добро пожаловать в drappogram! \n" +
-                            "Ссылка для активации: http://localhost:8080/activate/%s",
+                    """
+                            Привет, %s!\s
+                            Добро пожаловать в drappogram!\s
+                            Ссылка для активации: http://localhost:8080/activate/%s""",
                     dgUser.getLogin(),
                     dgUser.getActivationCode()
             );

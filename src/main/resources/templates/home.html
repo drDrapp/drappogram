@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head><title>title</title></head>
+<body>
+<section>
+    <!-- Content >>> -->
+    <div class="card my-2">
+        <div class="card-header">
+            <h3><b>:: welcome to drappogram ::</b></h3>
+        </div>
+        <div class="card-body">
+            <h4>
+                Привет,
+                <span sec:authorize="isAnonymous()">бродяга</span>
+                <span sec:authorize="isAuthenticated()">
+                    <span sec:authorize="hasAuthority('ADMIN')" th:text="мастер" class="badge text-bg-warning"></span>
+                    <span sec:authentication="name">username</span>
+                </span>!
+            </h4>
+        </div>
+    </div>
+    <!-- <<< Content -->
+</section>
+</body>
+</html>

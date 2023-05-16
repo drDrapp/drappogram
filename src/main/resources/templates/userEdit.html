@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
+<head><title>title</title></head>
+<body>
+<section>
+    <!-- Content >>> -->
+    <div class="card my-2">
+        <div class="card-header">
+            <b><span th:text="'Редактирование пользователя: ' + ${editableUser.login}"></span></b>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/user}" method="post">
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputFirstName">Имя</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${editableUser.firstName}"
+                               class="form-control"
+                               type="text"
+                               name="firstName"
+                               id="inputFirstName">
+                    </div>
+                </div>
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputLastName">Фамилия</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${editableUser.lastName}"
+                               class="form-control"
+                               type="text"
+                               name="lastName"
+                               id="inputLastName">
+                    </div>
+                </div>
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">Список ролей</div>
+                    <div class="col-auto">
+                        <div th:each="role : ${rolesAll}">
+                            <div class="form-check">
+                                <label th:for="'inputRole' + ${role}">
+                                    <span th:text="${role}"></span>
+                                </label>
+                                <label th:if="false">
+                                    <input type="checkbox"
+                                           th:id="'inputRole' + ${role}"
+                                           th:name="${role}"
+                                           th:checked="${#lists.contains(editableUser.roles, role)}"/></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input th:value="${editableUser.id}"
+                       type="hidden"
+                       name="userId">
+                <div class="row g-3 align-items-center">
+                    <div class="col-auto">
+                        <button class="btn btn-warning"
+                                type="submit">
+                            Сохранить
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- <<< Content -->
+</section>
+</body>
+</html>

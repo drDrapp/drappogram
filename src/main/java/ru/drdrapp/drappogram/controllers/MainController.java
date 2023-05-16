@@ -16,6 +16,7 @@ import ru.drdrapp.drappogram.repositories.DgUserRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,15 +40,15 @@ public class MainController {
     }
 
     @GetMapping("/main")
-    public ModelAndView mainGet(@RequestParam(required = false, defaultValue = "") String tagFilter,
-                                ModelAndView model) {
-        Iterable<DgMessage> dgMessages;
+    public ModelAndView mainGet(@RequestParam(required = false, defaultValue = "") String tagFilter) {
+        ModelAndView model = new ModelAndView("main");
+        List<DgMessage> dgMessages;
         if (tagFilter != null && !tagFilter.isEmpty()) {
             dgMessages = dgMessageRepository.findByTag(tagFilter);
         } else {
             dgMessages = dgMessageRepository.findAll();
         }
-        model.addObject("dgMessages", dgMessages);
+        model.addObject("allMessages", dgMessages);
         model.addObject("tagFilter", tagFilter);
         return model;
     }
@@ -56,8 +57,8 @@ public class MainController {
     public ModelAndView mainPost(@RequestParam("messageText") String messageText,
                                  @RequestParam("messageTag") String messageTag,
                                  @RequestParam("messageFile") MultipartFile messageFile,
-                                 @AuthenticationPrincipal UserDetails userDetails,
-                                 ModelAndView model) throws IOException {
+                                 @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        ModelAndView model = new ModelAndView("main");
         Optional<DgUser> dgUser = dgUserRepository.findOneByLogin(userDetails.getUsername());
         if (dgUser.isPresent()){
             DgMessage dgMessage = new DgMessage(messageText, messageTag, dgUser.get());
@@ -66,15 +67,15 @@ public class MainController {
                 if (!uploadDir.exists()){
                     uploadDir.mkdir();
                 }
-                String resultFilename = UUID.randomUUID().toString() + "." + messageFile.getOriginalFilename();
+                String resultFilename = UUID.randomUUID() + "." + messageFile.getOriginalFilename();
                 messageFile.transferTo(new File(uploadPath + "/" + resultFilename));
                 dgMessage.setFilename(resultFilename);
             }
             dgMessageRepository.save(dgMessage);
-            Iterable<DgMessage> dgMessages = dgMessageRepository.findAll();
-            model.addObject("dgUser", dgUser);
-            model.addObject("dgMessages", dgMessages);
         }
+        List<DgMessage> dgMessages;
+        dgMessages = dgMessageRepository.findAll();
+        model.addObject("allMessages", dgMessages);
         return model;
     }
 

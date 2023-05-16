@@ -25,21 +25,26 @@ public class UserController {
     }
 
     @GetMapping
-    public ModelAndView userList(ModelAndView model) {
+    public ModelAndView userList() {
+        ModelAndView model = new ModelAndView("userList");
         model.addObject("userList", dgUserRepository.findAll());
         return model;
     }
 
     @GetMapping("{dgUser}")
-    public ModelAndView userEditForm(@PathVariable DgUser dgUser, ModelAndView model) {
+    public ModelAndView userEdit(@PathVariable DgUser dgUser) {
+        ModelAndView model = new ModelAndView("userEdit");
         List<Role> allRoles = Arrays.asList(Role.values());
-        model.addObject("dgUser", dgUser);
-        model.addObject("allRoles", allRoles);
-        return new ModelAndView("userEdit", model.getModelMap());
+        model.addObject("editableUser", dgUser);
+        model.addObject("rolesAll", allRoles);
+        return model;
     }
 
     @PostMapping
-    public ModelAndView userSave(@RequestParam String firstName, @RequestParam String lastName, @RequestParam Map<String, String> form, @RequestParam("userId") DgUser dgUser) {
+    public ModelAndView userSave(@RequestParam String firstName,
+                                 @RequestParam String lastName,
+                                 @RequestParam Map<String, String> form,
+                                 @RequestParam("userId") DgUser dgUser) {
         dgUser.setFirstName(firstName);
         dgUser.setLastName(lastName);
         Set<String> allRoles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
@@ -50,7 +55,7 @@ public class UserController {
             }
         }
         dgUserRepository.save(dgUser);
-        return new ModelAndView("user");
+        return new ModelAndView("redirect:/user");
     }
 
 }

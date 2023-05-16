@@ -23,30 +23,34 @@ public class RegistrationController {
     }
 
     @GetMapping("/registration")
-    public ModelAndView registration(ModelAndView model) {
-        return model;
+    public ModelAndView registration() {
+        return new ModelAndView("registration");
     }
 
     @PostMapping("/registration")
-    public ModelAndView addUser(UserForm userForm, ModelAndView model) {
+    public ModelAndView addUser(UserForm userForm) {
+        ModelAndView model;
         Optional<DgUser> dgUserCandidate = dgUserRepository.findOneByLogin(userForm.getLogin());
         if (dgUserCandidate.isPresent()) {
+            model = new ModelAndView("registration");
             model.addObject("message", "Такой пользователь существует!");
-            return model;
+        } else {
+            registrationService.registration(userForm);
+            model = new ModelAndView("login");
         }
-        registrationService.registration(userForm);
-        return new ModelAndView("/login");
+        return model;
     }
 
     @GetMapping("/activate/{code}")
-    public ModelAndView activate(ModelAndView model, @PathVariable String code) {
+    public ModelAndView activate(@PathVariable String code) {
         boolean isActivated = registrationService.activateUser(code);
+        ModelAndView model = new ModelAndView("login");
         if (isActivated) {
             model.addObject("message", "Активация пользователя успешно завершена!");
         } else {
             model.addObject("message", "Пользователь с таким кодом активации не найден!");
         }
-        return new ModelAndView("login", model.getModelMap());
+        return model;
     }
 
 }

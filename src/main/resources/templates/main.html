@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
+<head><title>title</title></head>
+<body>
+<section>
+    <!--Content here >>>-->
+    <div class="card my-2">
+        <div class="card-header">
+            <b>Фильтр сообщений</b>
+        </div>
+        <div class="card-body">
+            <form th:action="@{/main}" method="get">
+                <div class="row p-1 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputTagFilter">Поиск по тегу</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${tagFilter}"
+                               class="form-control"
+                               type="text"
+                               name="tagFilter"
+                               id="inputTagFilter"
+                               placeholder="Введите тег">
+                    </div>
+                    <div class="col-auto">
+                        <button type="submit"
+                                class="btn btn-warning">Найти
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="my-1">
+                <a class="btn btn-warning"
+                   data-bs-toggle="collapse"
+                   href="#collapseExample"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="collapseExample">Добавить сообщение
+                </a>
+            </div>
+
+            <div class="collapse" id="collapseExample">
+                <form method="post" enctype="multipart/form-data">
+                    <div>
+                        <label for="inputMessageText"></label>
+                        <input class="form-control"
+                               type="text"
+                               name="messageText"
+                               id="inputMessageText"
+                               placeholder="Введите сообщение"/>
+                    </div>
+                    <div>
+                        <label for="inputMessageTag"></label>
+                        <input class="form-control"
+                               type="text"
+                               name="messageTag"
+                               id="inputMessageTag"
+                               placeholder="Тег">
+                    </div>
+                    <div class="mb-4">
+                        <label for="inputMessageFile"></label>
+                        <input class="form-control"
+                               type="file"
+                               name="messageFile"
+                               id="inputMessageFile"
+                               placeholder="Файл с изображением">
+                    </div>
+                    <div>
+                        <button type="submit"
+                                class="btn btn-warning">
+                            Добавить
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer">
+            <b>Список сообщений</b>
+        </div>
+        <div class="card-body">
+            <div class="row row-cols-1 row-cols-md-3 g-2">
+                <div th:each="_message : ${allMessages}" class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <img th:if="${_message.filename} != null"
+                                 th:src="'/img/' + ${_message.filename}"
+                                 width="150"
+                                 class="img-thumbnail"
+                                 alt=""
+                                 src="">
+                            <p th:text="${_message.text}" class="card-text"></p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="row">
+                                <div th:text="${_message.author.getLogin()}" class="col"></div>
+                                <div th:if="${!_message.tag.isEmpty()}" th:text="${_message.tag}" class="col-auto badge text-bg-secondary text-end"></div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--<<< Content here-->
+</section>
+</body>
+</html>
