@@ -10,7 +10,12 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public record DgUserDetailsImpl(DgUser dgUser) implements UserDetails {
+public class DgUserDetailsImpl implements UserDetails {
+    private final DgUser dgUser;
+
+    public DgUserDetailsImpl(DgUser dgUser) {
+        this.dgUser = dgUser;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -61,6 +66,10 @@ public record DgUserDetailsImpl(DgUser dgUser) implements UserDetails {
                 + dgUser.getLastName() + ' '
                 + dgUser.getFirstName() + ' '
                 + dgUser.getEmail() + ']';
+    }
+
+    public DgUser getDgUser() {
+        return dgUser;
     }
 
 }

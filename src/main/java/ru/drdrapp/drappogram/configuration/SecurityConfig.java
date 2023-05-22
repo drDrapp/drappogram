@@ -8,11 +8,11 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import ru.drdrapp.drappogram.services.DgUserDetailsServiceImpl;
 
 import javax.sql.DataSource;
 
@@ -21,11 +21,11 @@ import javax.sql.DataSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final UserDetailsService dgUserDetailsService;
+    private final DgUserDetailsServiceImpl dgUserDetailsService;
     private final PasswordEncoder passwordEncoder;
     private final DataSource dataSource;
 
-    public SecurityConfig(UserDetailsService dgUserDetailsService, PasswordEncoder passwordEncoder, DataSource dataSource) {
+    public SecurityConfig(DgUserDetailsServiceImpl dgUserDetailsService, PasswordEncoder passwordEncoder, DataSource dataSource) {
         this.dgUserDetailsService = dgUserDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
