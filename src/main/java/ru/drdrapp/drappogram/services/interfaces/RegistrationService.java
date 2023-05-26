@@ -1,4 +1,4 @@
-package ru.drdrapp.drappogram.services;
+package ru.drdrapp.drappogram.services.interfaces;
 
 import ru.drdrapp.drappogram.froms.UserForm;
 

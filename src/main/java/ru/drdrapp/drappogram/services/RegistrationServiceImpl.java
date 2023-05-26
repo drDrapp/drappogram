@@ -7,12 +7,13 @@ import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.Role;
 import ru.drdrapp.drappogram.models.State;
 import ru.drdrapp.drappogram.repositories.DgUserRepository;
+import ru.drdrapp.drappogram.services.interfaces.RegistrationService;
 
 import java.util.Collections;
 import java.util.UUID;
-
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
+
     private final DgUserRepository dgUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailSender mailSender;

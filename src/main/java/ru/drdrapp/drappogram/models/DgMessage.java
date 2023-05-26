@@ -12,9 +12,10 @@ import lombok.*;
 @ToString
 @Table(name = "dg_message")
 public class DgMessage {
+    public static final int START_SEQ = 10;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_message_gen")
-    @SequenceGenerator(name = "dg_message_gen", sequenceName = "dg_message_seq")
+    @SequenceGenerator(name = "dg_message_gen", sequenceName = "dg_message_seq", initialValue = DgMessage.START_SEQ, allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
 

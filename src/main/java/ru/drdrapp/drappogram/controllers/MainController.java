@@ -1,5 +1,6 @@
 package ru.drdrapp.drappogram.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,18 +23,15 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class MainController {
+
     private final DgMessageRepository dgMessageRepository;
     private final DgUserRepository dgUserRepository;
 
     @Value("${upload.path}")
     private String uploadPath;
 
-    public MainController(DgMessageRepository dgMessageRepository,
-                          DgUserRepository dgUserRepository) {
-        this.dgMessageRepository = dgMessageRepository;
-        this.dgUserRepository = dgUserRepository;
-    }
     @GetMapping("/")
     public ModelAndView home() {
         return new ModelAndView("home");
@@ -65,7 +63,10 @@ public class MainController {
             if (messageFile != null && !Objects.requireNonNull(messageFile.getOriginalFilename()).isEmpty()){
                     File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()){
-                    uploadDir.mkdir();
+                    boolean wasFileSystemOperationResult = uploadDir.mkdir();
+                    if (!wasFileSystemOperationResult) {
+                        System.out.println("Ошибка создания директории!");
+                    }
                 }
                 String resultFilename = UUID.randomUUID() + "." + messageFile.getOriginalFilename();
                 messageFile.transferTo(new File(uploadPath + "/" + resultFilename));

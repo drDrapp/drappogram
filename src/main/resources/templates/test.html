@@ -5,12 +5,11 @@
 <body>
 <section>
   <!-- Content >>> -->
-  <div class="m-3">Welcome,
-    <span th:text="${#authentication.principal.dgUser.lastName}"></span>
-  </div>
   <div class="card my-2">
     <div class="card-header">
-      <h3><b>Test Page</b></h3>
+      <h3><b>Test Page. User detail:
+        <span th:text="${#authentication.principal.dgUser.lastName}"></span>
+      </b></h3>
     </div>
     <div class="card-body m-2">
       <h4 class="card-footer">testObject</h4>

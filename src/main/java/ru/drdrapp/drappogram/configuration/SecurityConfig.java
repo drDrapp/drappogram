@@ -1,18 +1,20 @@
 package ru.drdrapp.drappogram.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
-import ru.drdrapp.drappogram.services.DgUserDetailsServiceImpl;
 
 import javax.sql.DataSource;
 
@@ -21,22 +23,29 @@ import javax.sql.DataSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final DgUserDetailsServiceImpl dgUserDetailsService;
-    private final PasswordEncoder passwordEncoder;
     private final DataSource dataSource;
+    private final UserDetailsService dgUserDetailsService;
+    private final PasswordEncoder passwordEncoder;
 
-    public SecurityConfig(DgUserDetailsServiceImpl dgUserDetailsService, PasswordEncoder passwordEncoder, DataSource dataSource) {
+    public SecurityConfig(DataSource dataSource, UserDetailsService dgUserDetailsService, PasswordEncoder passwordEncoder) {
+        this.dataSource = dataSource;
         this.dgUserDetailsService = dgUserDetailsService;
         this.passwordEncoder = passwordEncoder;
-        this.dataSource = dataSource;
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/", "/login", "/registration","/activate/*", "/static/**").permitAll()
-                        .requestMatchers("/main/**").hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers(
+                                "/",
+                                "/login",
+                                "/registration",
+                                "/activate/*",
+                                "/static/**").permitAll()
+                        .requestMatchers(
+                                "/main/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
@@ -48,8 +57,8 @@ public class SecurityConfig {
                 .rememberMe((remember) -> remember
                         .rememberMeParameter("remember-me")
                         .tokenRepository(tokenRepository()))
-                .logout(LogoutConfigurer::permitAll);
-        http.csrf().disable();
+                .logout(LogoutConfigurer::permitAll)
+                .authenticationProvider(authenticationProvider());
         return http.build();
     }
 
@@ -60,9 +69,17 @@ public class SecurityConfig {
         return jdbcTokenRepositoryImpl;
     }
 
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(dgUserDetailsService).passwordEncoder(passwordEncoder);
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(dgUserDetailsService);
+        authProvider.setPasswordEncoder(passwordEncoder);
+        return authProvider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+        return config.getAuthenticationManager();
     }
 
 }

@@ -1,5 +1,6 @@
 package ru.drdrapp.drappogram.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +18,10 @@ import java.util.stream.Collectors;
 @Controller
 @PreAuthorize("hasAuthority('ADMIN')")
 @RequestMapping("/user")
+@RequiredArgsConstructor
 public class UserController {
-    private final DgUserRepository dgUserRepository;
 
-    public UserController(DgUserRepository dgUserRepository) {
-        this.dgUserRepository = dgUserRepository;
-    }
+    private final DgUserRepository dgUserRepository;
 
     @GetMapping
     public ModelAndView userList() {

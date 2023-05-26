@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.drdrapp.drappogram.tmp.TmpClass;
 
 @Configuration
-public class ProjectConfig {
+public class ApplicationConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -15,7 +15,7 @@ public class ProjectConfig {
     }
 
     @Bean(name = "MyTmpBean")
-    TmpClass tmpClass(){
+    TmpClass tmpClass() {
         var tmpC = new TmpClass();
         tmpC.setTmpData("Init string data");
         return tmpC;

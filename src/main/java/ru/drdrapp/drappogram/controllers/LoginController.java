@@ -9,6 +9,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LoginController {
+
     private static final Logger LOGGER  = LoggerFactory.getLogger(LoginController.class);
 
     @GetMapping("/login")

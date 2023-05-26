@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>ru.drdrapp</groupId>
 	<artifactId>drappogram</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<name>drappogram</name>
-	<description>social drapping network</description>
+	<description>message collector</description>
 	<properties>
 		<java.version>17</java.version>
 		<snakeyaml.version>2.0</snakeyaml.version>
