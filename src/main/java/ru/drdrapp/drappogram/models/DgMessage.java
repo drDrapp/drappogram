@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @NoArgsConstructor
@@ -35,7 +37,8 @@ public class DgMessage {
     private String filename;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",foreignKey = @ForeignKey(name="dg_message_dg_user_id_fk"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private DgUser author;
 
     public DgMessage(@NonNull String text, String tag, DgUser author) {

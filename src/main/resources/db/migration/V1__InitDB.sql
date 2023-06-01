@@ -1,16 +1,8 @@
 CREATE SEQUENCE dg_user_id_seq
     START WITH 10;
 
-ALTER SEQUENCE dg_user_id_seq OWNER TO postgres;
-
-ALTER SEQUENCE dg_user_id_seq OWNED BY dg_user.id;
-
 CREATE SEQUENCE dg_message_id_seq
     START WITH 10;
-
-ALTER SEQUENCE dg_message_id_seq OWNER TO postgres;
-
-ALTER SEQUENCE dg_message_id_seq OWNED BY dg_message.id;
 
 
 CREATE TABLE dg_user
@@ -27,9 +19,7 @@ CREATE TABLE dg_user
     state           varchar(255)
 );
 
-ALTER TABLE dg_user
-    OWNER TO postgres;
-
+ALTER SEQUENCE dg_user_id_seq OWNED BY dg_user.id;
 
 CREATE TABLE IF NOT EXISTS dg_message
 (
@@ -44,8 +34,7 @@ CREATE TABLE IF NOT EXISTS dg_message
             ON UPDATE RESTRICT ON DELETE CASCADE
 );
 
-ALTER TABLE dg_message
-    OWNER TO postgres;
+ALTER SEQUENCE dg_message_id_seq OWNED BY dg_message.id;
 
 CREATE TABLE dg_user_role
 (
@@ -56,8 +45,6 @@ CREATE TABLE dg_user_role
     roles   varchar(255)
 );
 
-ALTER TABLE dg_user_role
-    OWNER TO postgres;
 
 CREATE TABLE persistent_logins
 (
@@ -67,6 +54,3 @@ CREATE TABLE persistent_logins
     token     varchar(64) NOT NULL,
     last_used timestamp   NOT NULL
 );
-
-ALTER TABLE persistent_logins
-    OWNER TO postgres;

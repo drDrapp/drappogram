@@ -39,7 +39,7 @@ public class DgUser {
     private String hashPassword;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "dg_user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "dg_user_role", joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="dg_user_role_dg_user_id_fk")))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
