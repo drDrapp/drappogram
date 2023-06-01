@@ -40,22 +40,26 @@
                    aria-controls="collapseExample">Добавить сообщение
                 </a>
             </div>
-
-            <div class="collapse" id="collapseExample">
+            <div th:class="${errorsMap == null ? 'collapse' : 'collapse show'}" id="collapseExample">
                 <form method="post" enctype="multipart/form-data">
                     <div>
                         <label for="inputMessageText"></label>
                         <input class="form-control"
                                type="text"
-                               name="messageText"
+                               name="text"
                                id="inputMessageText"
                                placeholder="Введите сообщение"/>
+                        <div th:if="${errorsMap != null}">
+                            <div th:if="${errorsMap.containsKey('textError')}"
+                                 th:text="${errorsMap.get('textError')}"
+                                 class="alert alert-danger"></div>
+                        </div>
                     </div>
                     <div>
                         <label for="inputMessageTag"></label>
                         <input class="form-control"
                                type="text"
-                               name="messageTag"
+                               name="tag"
                                id="inputMessageTag"
                                placeholder="Тег">
                     </div>
@@ -95,9 +99,8 @@
                         <div class="card-footer text-muted">
                             <div class="row">
                                 <div th:text="${_message.author.getLogin()}" class="col"></div>
-                                <div th:if="${!_message.tag.isEmpty()}" th:text="${_message.tag}" class="col-auto badge text-bg-secondary text-end"></div>
-
-
+                                <div th:if="${!_message.tag.isEmpty()}" th:text="${_message.tag}"
+                                     class="col-auto badge text-bg-secondary text-end"></div>
                             </div>
                         </div>
                     </div>

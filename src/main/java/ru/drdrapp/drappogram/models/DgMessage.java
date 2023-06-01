@@ -2,10 +2,10 @@ package ru.drdrapp.drappogram.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 @NoArgsConstructor
@@ -21,13 +21,13 @@ public class DgMessage {
 
     @Id
     @Column(name = "id", nullable = false)
-    @NotNull
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_message_id_gen")
     @SequenceGenerator(name = "dg_message_id_gen", sequenceName = "dg_message_id_seq", initialValue = DgMessage.START_SEQ, allocationSize = 1)
     private Long id;
 
     @Column(name = "text", nullable = false)
-    @NotBlank(message = "Text may not be blank")
+    @NotBlank(message = "Сообщение не должно быть пустым")
+    @Length(max = 2048, message = "Слишком длинный текст")
     private String text;
 
     @Column(name = "tag")

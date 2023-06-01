@@ -40,10 +40,9 @@ public class DgUserService implements UserDetailsService {
         if (dgUserCandidate.isPresent()) {
             return false;
         } else {
-            String hashPassword = passwordEncoder.encode(loginForm.getPassword());
             DgUser dgUser = DgUser.builder()
                     .login(loginForm.getLogin())
-                    .hashPassword(hashPassword)
+                    .hashPassword(passwordEncoder.encode(loginForm.getPassword()))
                     .roles(Collections.singleton(Role.USER))
                     .state(State.ACTIVE)
                     .email(loginForm.getEmail())

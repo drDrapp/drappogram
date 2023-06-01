@@ -64,4 +64,8 @@ public record DgUserDetails(DgUser dgUser) implements UserDetails {
                 + dgUser.getEmail() + ']';
     }
 
+    public DgUser getDgUser(){
+        return dgUser;
+    }
+
 }

@@ -30,7 +30,7 @@ public class TmpController {
     @GetMapping("/tmp")
     public ModelAndView getLoginPage() {
         ModelAndView model = new ModelAndView("tmp");
-        DgUser dgUser = new DgUser(777L, "xName1", "xName2", "xLogin", "hashPsw", Collections.singleton(Role.USER), State.ACTIVE, "ussr@mail.ru", "activationCode", true );
+        DgUser dgUser = new DgUser(777L, "xName1", "xName2", "xLogin", "hashPsw", "hashPsw", Collections.singleton(Role.USER), State.ACTIVE, "ussr@mail.ru", "activationCode", true );
         model.addObject("testObject", dgUser);
         model.addObject("tmpObject", tmpClass);
         TmpClass myTmpBean = context.getBean(TmpClass.class);
