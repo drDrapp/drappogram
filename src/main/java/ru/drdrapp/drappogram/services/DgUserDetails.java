@@ -10,12 +10,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class DgUserDetailsImpl implements UserDetails {
-    private final DgUser dgUser;
-
-    public DgUserDetailsImpl(DgUser dgUser) {
-        this.dgUser = dgUser;
-    }
+public record DgUserDetails(DgUser dgUser) implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -56,7 +51,7 @@ public class DgUserDetailsImpl implements UserDetails {
     public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (DgUserDetailsImpl) obj;
+        var that = (DgUserDetails) obj;
         return Objects.equals(this.dgUser, that.dgUser);
     }
 
@@ -66,10 +61,6 @@ public class DgUserDetailsImpl implements UserDetails {
                 + dgUser.getLastName() + ' '
                 + dgUser.getFirstName() + ' '
                 + dgUser.getEmail() + ']';
-    }
-
-    public DgUser getDgUser() {
-        return dgUser;
     }
 
 }

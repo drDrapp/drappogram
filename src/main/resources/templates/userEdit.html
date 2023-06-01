@@ -43,11 +43,12 @@
                                 <label th:for="'inputRole' + ${role}">
                                     <span th:text="${role}"></span>
                                 </label>
-                                <label th:if="false">
-                                    <input type="checkbox"
+                                <label>
+                                    <input th:type="checkbox"
                                            th:id="'inputRole' + ${role}"
                                            th:name="${role}"
-                                           th:checked="${#lists.contains(editableUser.roles, role)}"/></label>
+                                           th:checked="${#lists.contains(editableUser.roles, role)}"/>
+                                </label>
                             </div>
                         </div>
                     </div>

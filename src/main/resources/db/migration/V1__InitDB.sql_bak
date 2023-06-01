@@ -1,0 +1,77 @@
+CREATE SEQUENCE dg_user_id_seq START 10 INCREMENT 1;
+ALTER SEQUENCE dg_user_id_seq OWNER TO postgres;
+
+CREATE SEQUENCE dg_message_id_seq START 10 INCREMENT 1;
+ALTER SEQUENCE dg_message_id_seq OWNER TO postgres;
+
+
+CREATE TABLE dg_user
+(
+    id              BIGINT       NOT NULL PRIMARY KEY,
+    activation_code VARCHAR(255),
+    active          BOOLEAN      NOT NULL,
+    email           VARCHAR(255),
+    first_name      VARCHAR(255),
+    hash_password   VARCHAR(255) NOT NULL,
+    last_name       VARCHAR(255),
+    login           VARCHAR(255) NOT NULL,
+    state           VARCHAR(255)
+);
+ALTER TABLE dg_user
+    OWNER TO postgres;
+
+ALTER TABLE dg_user
+    ALTER COLUMN id SET DEFAULT NEXTVAL('dg_user_id_seq'::regclass);
+
+ALTER SEQUENCE dg_user_id_seq OWNED BY dg_user.id;
+
+
+CREATE TABLE dg_message
+(
+    id       BIGINT        NOT NULL PRIMARY KEY,
+    filename VARCHAR(255),
+    tag      VARCHAR(255),
+    text     VARCHAR(2048) NOT NULL,
+    user_id  BIGINT
+);
+
+ALTER TABLE dg_message
+    OWNER TO postgres;
+
+ALTER TABLE dg_message
+    ALTER COLUMN id SET DEFAULT NEXTVAL('dg_message_id_seq'::regclass);
+
+ALTER SEQUENCE dg_message_id_seq OWNED BY dg_message.id;
+
+ALTER TABLE dg_message
+    ADD CONSTRAINT dg_message_dg_user_id_fk
+        FOREIGN KEY (user_id) REFERENCES dg_user
+            ON UPDATE RESTRICT ON DELETE CASCADE;
+
+
+CREATE TABLE dg_user_role
+(
+    user_id BIGINT NOT NULL,
+    roles   VARCHAR(255)
+);
+
+ALTER TABLE dg_user_role
+    OWNER TO postgres;
+
+ALTER TABLE dg_user_role
+    ADD CONSTRAINT dg_user_role_dg_user_id_fk
+        FOREIGN KEY (user_id) REFERENCES dg_user
+            ON UPDATE RESTRICT ON DELETE CASCADE;
+
+
+CREATE TABLE persistent_logins
+(
+    username  VARCHAR(64) NOT NULL,
+    series    VARCHAR(64) NOT NULL
+        PRIMARY KEY,
+    token     VARCHAR(64) NOT NULL,
+    last_used TIMESTAMP   NOT NULL
+);
+
+ALTER TABLE persistent_logins
+    OWNER TO postgres;

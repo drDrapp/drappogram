@@ -20,8 +20,8 @@ public class DgUser {
     @Id
     @Column(name = "id", nullable = false)
     @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_user_gen")
-    @SequenceGenerator(name = "dg_user_gen", sequenceName = "dg_user_seq", initialValue = DgUser.START_SEQ, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_user_id_gen")
+    @SequenceGenerator(name = "dg_user_id_gen", sequenceName = "dg_user_id_seq", initialValue = DgUser.START_SEQ, allocationSize = 1)
     private Long id;
 
     @Column(name = "first_name")
@@ -52,5 +52,9 @@ public class DgUser {
 
     @Column(name = "activation_code")
     private String activationCode;
+
+    @Column(name = "active", nullable = false)
+    @NotNull
+    private Boolean active;
 
 }

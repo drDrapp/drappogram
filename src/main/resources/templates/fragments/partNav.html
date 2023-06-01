@@ -31,7 +31,11 @@
                     </li>
                 </ul>
             </div>
-            <div sec:authorize="isAuthenticated()" class="navbar-text ms-3" sec:authentication="name"></div>
+            <div sec:authorize="isAuthenticated()" class="navbar-text ms-3">
+                <a href="/user/profile">
+                    <span sec:authentication="name"></span>
+                </a>
+            </div>
             <div sec:authorize="isAuthenticated()" class="navbar-text ms-3">
                 <form th:action="@{/logout}" method="post">
                     <button class="btn btn-secondary"
@@ -40,8 +44,8 @@
                 </form>
             </div>
             <div sec:authorize="isAnonymous()">
-                <a href="/login" class="navbar-text ms-3"> Войти </a>
-                <a href="/registration" class="navbar-text ms-3"> Зарегистрироваться </a>
+                <a href="/login" class="navbar-text ms-3">Войти</a>
+                <a href="/registration" class="navbar-text ms-3">Зарегистрироваться</a>
             </div>
         </div>
     </nav>

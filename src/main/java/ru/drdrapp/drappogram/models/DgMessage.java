@@ -20,8 +20,8 @@ public class DgMessage {
     @Id
     @Column(name = "id", nullable = false)
     @NotNull
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_message_gen")
-    @SequenceGenerator(name = "dg_message_gen", sequenceName = "dg_message_seq", initialValue = DgMessage.START_SEQ, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "dg_message_id_gen")
+    @SequenceGenerator(name = "dg_message_id_gen", sequenceName = "dg_message_id_seq", initialValue = DgMessage.START_SEQ, allocationSize = 1)
     private Long id;
 
     @Column(name = "text", nullable = false)

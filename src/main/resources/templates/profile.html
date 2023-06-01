@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
+<head><title>title</title></head>
+<body>
+<section>
+    <!-- Content >>> -->
+    <div class="card my-2">
+        <div class="card-header">
+            <b><span th:text="'Редактирование пользователя: ' + ${#authentication.principal.dgUser.login}"></span></b>
+            <span th:class="'base ' + ${#authentication.principal.dgUser.active == true ? 'badge text-bg-warning' : 'badge text-bg-secondary'}"
+                  th:text="(${#authentication.principal.dgUser.active} == true) ? '(Активирован)' : '(Не активирован)'"></span>
+        </div>
+        <div class="card-body">
+
+            <form method="post">
+
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputFirstName">Имя</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${#authentication.principal.dgUser.firstName}"
+                               class="form-control"
+                               type="text"
+                               name="firstName"
+                               id="inputFirstName">
+                    </div>
+                </div>
+
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputLastName">Фамилия</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${#authentication.principal.dgUser.lastName}"
+                               class="form-control"
+                               type="text"
+                               name="lastName"
+                               id="inputLastName">
+                    </div>
+                </div>
+
+                <div class="row p-1 g-3 align-items-center">
+                    <div class="col-auto">
+                        <label for="inputEmail">E-mail</label>
+                    </div>
+                    <div class="col-auto">
+                        <input th:value="${#authentication.principal.dgUser.email}"
+                               class="form-control"
+                               type="text"
+                               name="lastName"
+                               id="inputEmail">
+                    </div>
+                </div>
+
+                <div class="row p-1 align-items-center">
+                    <div class="col-auto">
+                        <label class="col-form-label" for="inputPassword">Пароль:</label>
+                    </div>
+                    <div class="col-auto">
+                        <input class="form-control"
+                               type="password"
+                               name="password"
+                               id="inputPassword">
+                    </div>
+                </div>
+
+                <input th:value="${#authentication.principal.dgUser.id}"
+                       type="hidden"
+                       name="userId">
+
+                <div class="row p-1 align-items-center">
+                    <div class="col">
+                        <button class="btn btn-warning"
+                                type="submit">
+                            <span th:text="Сохранить"></span>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    <!-- <<< Content -->
+</section>
+</body>
+</html>

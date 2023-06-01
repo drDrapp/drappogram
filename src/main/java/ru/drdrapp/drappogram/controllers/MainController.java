@@ -57,7 +57,7 @@ public class MainController {
                                  @RequestParam("messageFile") MultipartFile messageFile,
                                  @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         ModelAndView model = new ModelAndView("main");
-        Optional<DgUser> dgUser = dgUserRepository.findOneByLogin(userDetails.getUsername());
+        Optional<DgUser> dgUser = dgUserRepository.findByLogin(userDetails.getUsername());
         if (dgUser.isPresent()){
             DgMessage dgMessage = new DgMessage(messageText, messageTag, dgUser.get());
             if (messageFile != null && !Objects.requireNonNull(messageFile.getOriginalFilename()).isEmpty()){
