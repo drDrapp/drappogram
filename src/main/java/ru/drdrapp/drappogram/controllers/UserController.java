@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import ru.drdrapp.drappogram.froms.UserForm;
+import ru.drdrapp.drappogram.froms.ProfileForm;
 import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.Role;
 import ru.drdrapp.drappogram.services.DgUserService;
@@ -67,10 +67,10 @@ public class UserController {
     }
 
     @PostMapping("profile")
-    public ModelAndView UpdateProfile(UserForm userForm,
-                                      @RequestParam("userId") DgUser dgUser) {
-        dgUserService.updateProfile(userForm, dgUser);
-        return new ModelAndView("profile");
+    public ModelAndView UpdateProfile(ProfileForm profileForm, @RequestParam("userId") DgUser dgUser) {
+    //public ModelAndView UpdateProfile(ProfileForm profileForm) {
+        dgUserService.updateProfile(profileForm, dgUser);
+        return new ModelAndView("redirect:/user/profile");
     }
 
 }

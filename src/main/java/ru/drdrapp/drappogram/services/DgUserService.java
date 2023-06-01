@@ -1,11 +1,15 @@
 package ru.drdrapp.drappogram.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.drdrapp.drappogram.froms.UserForm;
+import ru.drdrapp.drappogram.froms.LoginForm;
+import ru.drdrapp.drappogram.froms.ProfileForm;
 import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.Role;
 import ru.drdrapp.drappogram.models.State;
@@ -31,18 +35,18 @@ public class DgUserService implements UserDetailsService {
         return new DgUserDetails(dgUserRepository.findByLogin(login).orElseThrow(IllegalArgumentException::new));
     }
 
-    public Boolean registerUser(UserForm userForm) {
-        Optional<DgUser> dgUserCandidate = dgUserRepository.findByLogin(userForm.getLogin());
+    public Boolean registerUser(LoginForm loginForm) {
+        Optional<DgUser> dgUserCandidate = dgUserRepository.findByLogin(loginForm.getLogin());
         if (dgUserCandidate.isPresent()) {
             return false;
         } else {
-            String hashPassword = passwordEncoder.encode(userForm.getPassword());
+            String hashPassword = passwordEncoder.encode(loginForm.getPassword());
             DgUser dgUser = DgUser.builder()
-                    .login(userForm.getLogin())
+                    .login(loginForm.getLogin())
                     .hashPassword(hashPassword)
                     .roles(Collections.singleton(Role.USER))
                     .state(State.ACTIVE)
-                    .email(userForm.getEmail())
+                    .email(loginForm.getEmail())
                     .activationCode(UUID.randomUUID().toString())
                     .active(false)
                     .build();
@@ -86,34 +90,47 @@ public class DgUserService implements UserDetailsService {
         dgUserRepository.save(dgUser);
     }
 
-    public void updateProfile(UserForm userForm, DgUser dgUser) {
+    public void updateProfile(ProfileForm profileForm, DgUser dgUser) {
+        boolean isProfileChanged = false;
 
-        if (isEmailChanged(userForm, dgUser) || isPasswordChanged(userForm, dgUser)) {
-            saveUser(dgUser);
+        String dgUserFirstName = dgUser.getFirstName();
+        String profileFormFirstName = profileForm.getFirstName();
+        if ((profileFormFirstName != null && !profileFormFirstName.equals(dgUserFirstName)) ||
+                (dgUserFirstName != null && !dgUserFirstName.equals(profileFormFirstName))) {
+            dgUser.setFirstName(profileFormFirstName);
+            isProfileChanged = true;
         }
-    }
 
-    private boolean isPasswordChanged(UserForm userForm, DgUser dgUser) {
-        String userFormPassword = userForm.getPassword();
+        String profileFormLastName = profileForm.getLastName();
+        String dgUserLastName = dgUser.getLastName();
+        if ((profileFormLastName != null && !profileFormLastName.equals(dgUserLastName)) ||
+                (dgUserLastName != null && !dgUserLastName.equals(profileFormLastName))) {
+            dgUser.setLastName(profileFormLastName);
+            isProfileChanged = true;
+        }
+
+        String userFormPassword = profileForm.getPassword();
         if (hasLength(userFormPassword)) {
             dgUser.setHashPassword(passwordEncoder.encode(userFormPassword));
-            return true;
+            isProfileChanged = true;
         }
-        return false;
-    }
 
-    private boolean isEmailChanged(UserForm userForm, DgUser dgUser) {
-        String userFormEmail = userForm.getEmail();
+        String profileFormEmail = profileForm.getEmail();
         String dgUserEmail = dgUser.getEmail();
-        if ((userFormEmail != null && !userFormEmail.equals(dgUserEmail)) ||
-                (dgUserEmail != null && !dgUserEmail.equals(userFormEmail))) {
-            dgUser.setEmail(userFormEmail);
-            if (hasLength(userFormEmail)) {
+        if ((profileFormEmail != null && !profileFormEmail.equals(dgUserEmail)) ||
+                (dgUserEmail != null && !dgUserEmail.equals(profileFormEmail))) {
+            dgUser.setEmail(profileFormEmail);
+            if (hasLength(profileFormEmail)) {
                 dgUser.setActivationCode(UUID.randomUUID().toString());
                 SendActivationCode(dgUser);
             }
-            return true;
+            isProfileChanged = true;
         }
-        return false;
+        if (isProfileChanged) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            Authentication newAuth = new UsernamePasswordAuthenticationToken(new DgUserDetails(dgUser), auth.getCredentials(), auth.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(newAuth);
+            saveUser(dgUser);
+        }
     }
 }

@@ -57,9 +57,10 @@ public record DgUserDetails(DgUser dgUser) implements UserDetails {
 
     @Override
     public String toString() {
-        return "Custom user detail["
-                + dgUser.getLastName() + ' '
-                + dgUser.getFirstName() + ' '
+        return "Custom user["
+                + dgUser.getLogin() + "/ "
+                + dgUser.getLastName() + "/ "
+                + dgUser.getFirstName() + "/ "
                 + dgUser.getEmail() + ']';
     }
 

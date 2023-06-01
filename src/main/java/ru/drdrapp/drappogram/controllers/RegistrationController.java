@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ru.drdrapp.drappogram.froms.UserForm;
+import ru.drdrapp.drappogram.froms.LoginForm;
 import ru.drdrapp.drappogram.services.DgUserService;
 
 @Controller
@@ -31,9 +31,9 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView registerUser(UserForm userForm) {
+    public ModelAndView registerUser(LoginForm loginForm) {
         ModelAndView model = new ModelAndView();
-        if (dgUserService.registerUser(userForm)) {
+        if (dgUserService.registerUser(loginForm)) {
             model.setViewName("login");
         } else {
             model.setViewName("registration");
