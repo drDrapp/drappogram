@@ -10,10 +10,10 @@ CREATE TABLE dg_user
     id              bigint DEFAULT NEXTVAL('dg_user_id_seq'::regclass) NOT NULL
         PRIMARY KEY,
     activation_code varchar(255),
-    active          boolean                                            NOT NULL,
-    email           varchar(255),
+    active          boolean,
+    email           varchar(255)                                       NOT NULL,
     first_name      varchar(255),
-    hash_password   varchar(255)                                       NOT NULL,
+    password        varchar(255)                                       NOT NULL,
     last_name       varchar(255),
     login           varchar(255)                                       NOT NULL,
     state           varchar(255)

@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.drdrapp.drappogram.froms.LoginForm;
 import ru.drdrapp.drappogram.froms.ProfileForm;
 import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.Role;
@@ -35,20 +34,17 @@ public class DgUserService implements UserDetailsService {
         return new DgUserDetails(dgUserRepository.findByLogin(login).orElseThrow(IllegalArgumentException::new));
     }
 
-    public Boolean registerUser(LoginForm loginForm) {
-        Optional<DgUser> dgUserCandidate = dgUserRepository.findByLogin(loginForm.getLogin());
-        if (dgUserCandidate.isPresent()) {
+    public Boolean registerUser(DgUser dgUser) {
+        Optional<DgUser> dgUserCandidate = dgUserRepository.findByLogin(dgUser.getLogin());
+        List<DgUser> dgUserCandidates = dgUserRepository.findByEmail(dgUser.getEmail());
+        if (dgUserCandidate.isPresent() || (!dgUserCandidates.isEmpty())) {
             return false;
         } else {
-            DgUser dgUser = DgUser.builder()
-                    .login(loginForm.getLogin())
-                    .hashPassword(passwordEncoder.encode(loginForm.getPassword()))
-                    .roles(Collections.singleton(Role.USER))
-                    .state(State.ACTIVE)
-                    .email(loginForm.getEmail())
-                    .activationCode(UUID.randomUUID().toString())
-                    .active(false)
-                    .build();
+            dgUser.setPassword(passwordEncoder.encode(dgUser.getPassword()));
+            dgUser.setRoles(Collections.singleton(Role.USER));
+            dgUser.setState(State.ACTIVE);
+            dgUser.setActivationCode(UUID.randomUUID().toString());
+            dgUser.setActive(false);
             dgUserRepository.save(dgUser);
             if (!dgUser.getEmail().isEmpty()) {
                 SendActivationCode(dgUser);
@@ -110,7 +106,7 @@ public class DgUserService implements UserDetailsService {
 
         String userFormPassword = profileForm.getPassword();
         if (hasLength(userFormPassword)) {
-            dgUser.setHashPassword(passwordEncoder.encode(userFormPassword));
+            dgUser.setPassword(passwordEncoder.encode(userFormPassword));
             isProfileChanged = true;
         }
 

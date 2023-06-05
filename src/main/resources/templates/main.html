@@ -49,11 +49,9 @@
                                name="text"
                                id="inputMessageText"
                                placeholder="Введите сообщение"/>
-                        <div th:if="${errorsMap != null}">
-                            <div th:if="${errorsMap.containsKey('textError')}"
+                            <div th:if="${errorsMap != null}"
                                  th:text="${errorsMap.get('textError')}"
-                                 class="alert alert-danger"></div>
-                        </div>
+                                 class="alert alert-danger my-1"></div>
                     </div>
                     <div>
                         <label for="inputMessageTag"></label>
@@ -62,6 +60,9 @@
                                name="tag"
                                id="inputMessageTag"
                                placeholder="Тег">
+                        <div th:if="${errorsMap != null}"
+                             th:text="${errorsMap.get('tagError')}"
+                             class="alert alert-danger my-1"></div>
                     </div>
                     <div class="mb-4">
                         <label for="inputMessageFile"></label>

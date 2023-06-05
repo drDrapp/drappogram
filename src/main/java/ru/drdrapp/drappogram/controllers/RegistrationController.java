@@ -1,14 +1,19 @@
 package ru.drdrapp.drappogram.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import ru.drdrapp.drappogram.froms.LoginForm;
+import ru.drdrapp.drappogram.Utils.DgUtils;
+import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.services.DgUserService;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,13 +36,29 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView registerUser(LoginForm loginForm) {
+    public ModelAndView registerUser(@Valid DgUser dgUser,
+                                     BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
-        if (dgUserService.registerUser(loginForm)) {
-            model.setViewName("login");
-        } else {
+        if (bindingResult.hasErrors()) {
             model.setViewName("registration");
-            model.addObject("message", "Такой пользователь уже существует!");
+            Map<String, String> errorsMap = DgUtils.getErrors(bindingResult);
+            model.addObject("errorsMap", errorsMap);
+            model.addObject("dgUser", dgUser);
+        } else {
+            if (!dgUser.getPassword().equals(dgUser.getPasswordToConfirm())){
+                model.setViewName("registration");
+                model.addObject("message", "Пароли не совпадают!");
+                return model;
+            }
+            if (dgUserService.registerUser(dgUser)) {
+                model.setViewName("login");
+                model.addObject("message", "Регистрация прошла успешно!");
+                model.addObject("messageType", "success");
+                model.addObject("dgUser", null);
+            } else {
+                model.setViewName("registration");
+                model.addObject("message", "Такой пользователь уже существует!");
+            }
         }
         return model;
     }

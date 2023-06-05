@@ -67,7 +67,8 @@ public class UserController {
     }
 
     @PostMapping("profile")
-    public ModelAndView UpdateProfile(ProfileForm profileForm, @RequestParam("userId") DgUser dgUser) {
+    public ModelAndView UpdateProfile(ProfileForm profileForm,
+                                      @RequestParam("userId") DgUser dgUser) {
     //public ModelAndView UpdateProfile(ProfileForm profileForm) {
         dgUserService.updateProfile(profileForm, dgUser);
         return new ModelAndView("redirect:/user/profile");

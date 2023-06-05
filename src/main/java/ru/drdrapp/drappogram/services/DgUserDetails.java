@@ -19,7 +19,7 @@ public record DgUserDetails(DgUser dgUser) implements UserDetails {
 
     @Override
     public String getPassword() {
-        return dgUser.getHashPassword();
+        return dgUser.getPassword();
     }
 
     @Override

@@ -27,10 +27,11 @@ public class DgMessage {
 
     @Column(name = "text", nullable = false)
     @NotBlank(message = "Сообщение не должно быть пустым")
-    @Length(max = 2048, message = "Слишком длинный текст")
+    @Length(max = 2048, message = "Слишком длинный текст сообщения")
     private String text;
 
     @Column(name = "tag")
+    @Length(max = 128, message = "Слишком длинный тег")
     private String tag;
 
     @Column(name = "filename")
@@ -41,9 +42,4 @@ public class DgMessage {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private DgUser author;
 
-    public DgMessage(@NonNull String text, String tag, DgUser author) {
-        this.text = text;
-        this.tag = tag;
-        this.author = author;
-    }
 }

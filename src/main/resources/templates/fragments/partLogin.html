@@ -10,40 +10,78 @@
             <form th:action="@{${path}}" method="post">
                 <div class="row p-1 align-items-center">
                     <div class="col-auto">
-                        <label class="col-form-label" for="inputLogin">Логин :</label>
+                        <label class="col-form-label" for="inputLogin">Логин:</label>
                     </div>
                     <div class="col-auto">
-                        <input class="form-control"
-                               type="text"
-                               name="login"
-                               id="inputLogin"
-                               placeholder="Логин"/>
+                        <th:block th:with="fieldError=${errorsMap?.get('loginError')?:false}">
+                            <input th:class="${fieldError}?'form-control is-invalid':'form-control'"
+                                   th:value="${dgUser?.getLogin}"
+                                   type="text"
+                                   name="login"
+                                   id="inputLogin"
+                                   placeholder="Логин"/>
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1"></div>
+                        </th:block>
                     </div>
                 </div>
+
                 <div class="row p-1 align-items-center">
                     <div class="col-auto">
                         <label class="col-form-label" for="inputPassword">Пароль:</label>
                     </div>
                     <div class="col-auto">
-                        <input class="form-control"
-                               type="password"
-                               name="password"
-                               id="inputPassword"
-                               placeholder="Пароль"/>
+                        <th:block th:with="fieldError=${errorsMap?.get('passwordError')?:false}">
+                            <input th:class="${fieldError}?'form-control is-invalid':'form-control'"
+                                   type="password"
+                                   name="password"
+                                   id="inputPassword"
+                                   placeholder="Пароль"/>
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1"></div>
+                        </th:block>
                     </div>
                 </div>
+
+                <div th:if="${isRegisterForm} == true" class="row p-1 align-items-center">
+                    <div class="col-auto">
+                        <label class="col-form-label" for="inputPasswordToConfirm">Подтверждение:</label>
+                    </div>
+                    <div class="col-auto">
+                        <th:block th:with="fieldError=${errorsMap?.get('passwordToConfirmError')?:false}">
+                            <input th:class="${fieldError}?'form-control is-invalid':'form-control'"
+                                   type="password"
+                                   name="passwordToConfirm"
+                                   id="inputPasswordToConfirm"
+                                   placeholder="Подтверждение пароля"/>
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1"></div>
+                        </th:block>
+                    </div>
+                </div>
+
                 <div th:if="${isRegisterForm} == true" class="row p-1 align-items-center">
                     <div class="col-auto">
                         <label class="col-form-label" for="inputEmail">E-mail:</label>
                     </div>
                     <div class="col-auto">
-                        <input class="form-control"
-                               type="email"
-                               name="email"
-                               id="inputEmail"
-                               placeholder="e-mail"/>
+                        <th:block th:with="fieldError=${errorsMap?.get('emailError')?:false}">
+                            <input th:class="${fieldError}?'form-control is-invalid':'form-control'"
+                                   th:value="${dgUser?.getEmail}"
+                                   type="email"
+                                   name="email"
+                                   id="inputEmail"
+                                   placeholder="e-mail"/>
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1"></div>
+                        </th:block>
                     </div>
                 </div>
+
                 <div class="row p-1 align-items-center">
                     <div class="col">
                         <button class="btn btn-warning"
@@ -52,6 +90,7 @@
                         </button>
                     </div>
                 </div>
+
                 <div th:if="${isRegisterForm} == false" class="row p-1 align-items-center">
                     <div class="col">
                         <div class="form-check">

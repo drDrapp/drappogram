@@ -3,7 +3,6 @@ package ru.drdrapp.drappogram.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.Set;
@@ -34,13 +33,13 @@ public class DgUser {
     @NotBlank(message = "Логин пользователя не должно быть пустым")
     private String login;
 
-    @Column(name = "hash_password", nullable = false)
+    @Column(name = "password", nullable = false)
     @NotBlank
-    private String hashPassword;
+    private String password;
 
     @Transient
     @NotBlank
-    private String hashPasswordToConfirm;
+    private String passwordToConfirm;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "dg_user_role", joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="dg_user_role_dg_user_id_fk")))
@@ -52,6 +51,7 @@ public class DgUser {
     private State state;
 
     @Column(name = "email")
+    @NotBlank(message = "Электронный адрес обязателен для заполнения")
     @Email(message = "Некорректный адрес")
     private String email;
 
@@ -59,7 +59,6 @@ public class DgUser {
     private String activationCode;
 
     @Column(name = "active", nullable = false)
-    @NotNull
     private Boolean active;
 
 }
