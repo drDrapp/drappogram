@@ -30,15 +30,15 @@ public class DgUser {
     private String lastName;
 
     @Column(name = "login", nullable = false)
-    @NotBlank(message = "Логин пользователя не должно быть пустым")
+    @NotBlank(message = "Логин пользователя не должен быть пустым")
     private String login;
 
     @Column(name = "password", nullable = false)
-    @NotBlank
+    @NotBlank(message = "Пароль пользователя не должен быть пустым")
     private String password;
 
     @Transient
-    @NotBlank
+    @NotBlank(message = "Подтверждение не должно быть пустым")
     private String passwordToConfirm;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)

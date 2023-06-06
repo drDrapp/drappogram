@@ -48,10 +48,13 @@
                                type="text"
                                name="text"
                                id="inputMessageText"
+                               th:value="${dgMessage?.getText()}"
                                placeholder="Введите сообщение"/>
-                            <div th:if="${errorsMap != null}"
-                                 th:text="${errorsMap.get('textError')}"
-                                 class="alert alert-danger my-1"></div>
+                        <th:block th:with="fieldError=${errorsMap?.get('textError')?:false}">
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1 p-1"></div>
+                        </th:block>
                     </div>
                     <div>
                         <label for="inputMessageTag"></label>
@@ -59,10 +62,13 @@
                                type="text"
                                name="tag"
                                id="inputMessageTag"
+                               th:value="${dgMessage?.getTag()}"
                                placeholder="Тег">
-                        <div th:if="${errorsMap != null}"
-                             th:text="${errorsMap.get('tagError')}"
-                             class="alert alert-danger my-1"></div>
+                        <th:block th:with="fieldError=${errorsMap?.get('tagError')?:false}">
+                            <div th:if="${fieldError}"
+                                 th:text="${fieldError}"
+                                 class="alert alert-danger my-1 p-1"></div>
+                        </th:block>
                     </div>
                     <div class="mb-4">
                         <label for="inputMessageFile"></label>
