@@ -18,7 +18,7 @@
                     <th scope="col">Фамилия</th>
                     <th scope="col">Статус</th>
                     <th scope="col">Роли</th>
-                    <th scope="col">Управление</th>
+                    <th scope="col">Email</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +28,7 @@
                     <td th:text="${_User.lastName}"></td>
                     <td th:text="${_User.state}"></td>
                     <td th:text="${_User.roles}"></td>
+                    <td th:text="${_User.email}"></td>
                     <td class="col"><a class="btn btn-outline-primary btn-sm" th:href="'/user/' + ${_User.id}">Редактировать</a></td>
                 </tr>
                 </tbody>

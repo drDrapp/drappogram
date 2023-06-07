@@ -75,6 +75,7 @@ public class MainController {
                 messageFile.transferTo(new File(uploadPath + "/" + resultFilename));
                 dgMessage.setFilename(resultFilename);
             }
+            model.addObject("dgMessage", null);
             dgMessageRepository.save(dgMessage);
         }
         List<DgMessage> dgMessages;

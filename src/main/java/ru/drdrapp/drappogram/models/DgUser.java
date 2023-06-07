@@ -37,10 +37,6 @@ public class DgUser {
     @NotBlank(message = "Пароль пользователя не должен быть пустым")
     private String password;
 
-    @Transient
-    @NotBlank(message = "Подтверждение не должно быть пустым")
-    private String passwordToConfirm;
-
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "dg_user_role", joinColumns = @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name="dg_user_role_dg_user_id_fk")))
     @Enumerated(EnumType.STRING)

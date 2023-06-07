@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ru.drdrapp.drappogram.Utils.DgUtils;
 import ru.drdrapp.drappogram.models.DgUser;
@@ -36,17 +37,17 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public ModelAndView registerUser(@Valid DgUser dgUser,
+    public ModelAndView registerUser(@RequestParam("passwordToConfirm") String passwordToConfirm,
+                                     @Valid DgUser dgUser,
                                      BindingResult bindingResult) {
         ModelAndView model = new ModelAndView();
+        model.setViewName("registration");
         if (bindingResult.hasErrors()) {
-            model.setViewName("registration");
             Map<String, String> errorsMap = DgUtils.getErrors(bindingResult);
             model.addObject("errorsMap", errorsMap);
             model.addObject("dgUser", dgUser);
         } else {
-            if (!dgUser.getPassword().equals(dgUser.getPasswordToConfirm())){
-                model.setViewName("registration");
+            if (!dgUser.getPassword().equals(passwordToConfirm)) {
                 model.addObject("message", "Пароли не совпадают!");
                 return model;
             }
@@ -56,7 +57,6 @@ public class RegistrationController {
                 model.addObject("messageType", "success");
                 model.addObject("dgUser", null);
             } else {
-                model.setViewName("registration");
                 model.addObject("message", "Такой пользователь уже существует!");
             }
         }

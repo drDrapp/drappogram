@@ -2,6 +2,7 @@ package ru.drdrapp.drappogram.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final DgUserService dgUserService;
+    private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
@@ -43,13 +45,13 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
-    public ModelAndView updateUser(
-            @RequestParam String firstName,
-            @RequestParam String lastName,
+    public ModelAndView updateUser(ProfileForm profileForm,
             @RequestParam Map<String, String> form,
             @RequestParam("userId") DgUser dgUser) {
-        dgUser.setFirstName(firstName);
-        dgUser.setLastName(lastName);
+        dgUser.setFirstName(profileForm.getFirstName());
+        dgUser.setLastName(profileForm.getLastName());
+        dgUser.setEmail(profileForm.getEmail());
+        dgUser.setPassword(passwordEncoder.encode(profileForm.getPassword()));
         Set<String> allRoles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
         dgUser.getRoles().clear();
         for (String key : form.keySet()) {
@@ -69,7 +71,6 @@ public class UserController {
     @PostMapping("profile")
     public ModelAndView UpdateProfile(ProfileForm profileForm,
                                       @RequestParam("userId") DgUser dgUser) {
-    //public ModelAndView UpdateProfile(ProfileForm profileForm) {
         dgUserService.updateProfile(profileForm, dgUser);
         return new ModelAndView("redirect:/user/profile");
     }
