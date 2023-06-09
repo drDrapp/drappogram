@@ -11,7 +11,9 @@ import ru.drdrapp.drappogram.models.Role;
 import ru.drdrapp.drappogram.models.State;
 import ru.drdrapp.drappogram.repositories.DgMessageRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 @Controller
 public class TmpController {
@@ -30,7 +32,18 @@ public class TmpController {
     @GetMapping("/tmp")
     public ModelAndView getLoginPage() {
         ModelAndView model = new ModelAndView("tmp");
-        DgUser dgUser = new DgUser(777L, "xName1", "xName2", "xLogin", "psw", Collections.singleton(Role.USER), State.ACTIVE, "ussr@mail.ru", "activationCode", true );
+        List<DgMessage> dgMessageList = new ArrayList<>();
+        DgUser dgUser = new DgUser(777L,
+                "xName1",
+                "xName2",
+                "xLogin",
+                "psw",
+                Collections.singleton(Role.USER),
+                dgMessageList,
+                State.ACTIVE,
+                "ussr@mail.ru",
+                "activationCode",
+                true);
         model.addObject("testObject", dgUser);
         model.addObject("tmpObject", tmpClass);
         TmpClass myTmpBean = context.getBean(TmpClass.class);

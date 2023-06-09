@@ -13,7 +13,6 @@ import org.hibernate.validator.constraints.Length;
 @Builder
 @Getter
 @Setter
-@ToString
 @Table(name = "dg_message")
 public class DgMessage {
 
@@ -42,4 +41,12 @@ public class DgMessage {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private DgUser author;
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "text = " + text + ", " +
+                "tag = " + tag + ", " +
+                "filename = " + filename + ")";
+    }
 }

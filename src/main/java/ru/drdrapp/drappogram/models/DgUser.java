@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import java.util.Set;
 @Builder
 @Entity
 @Table(name = "dg_user")
+@NamedEntityGraph(name = "dgUser_entity-graph", attributeNodes = @NamedAttributeNode("dgMessages"))
 public class DgUser {
 
     public static final int START_SEQ = 10;
@@ -42,6 +44,9 @@ public class DgUser {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<DgMessage> dgMessages;
+
     @Column(name = "state")
     @Enumerated(value = EnumType.STRING)
     private State state;
@@ -56,5 +61,18 @@ public class DgUser {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DgUser dgUser = (DgUser) o;
+        return id.equals(dgUser.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
+<head><title>title</title></head>
+<body>
+<section>
+    <!-- Content >>> -->
+    <div class="card my-2">
+        <div class="card-header">
+            <b>Сообщения пользователя:
+                <span th:text="${#authentication.principal.getDgUser.login}"></span>
+            </b>
+        </div>
+        <div class="card-body">
+            <th:block th:if="${isCurrentUser}">
+                <div th:replace="~{fragments/partMessageEdit :: fr_messageEdit}"></div>
+            </th:block>
+            <div class="card-footer">
+                <b>Список сообщений</b>
+            </div>
+            <div class="card-body">
+                <div th:replace="~{fragments/partMessages :: fr_messages}"></div>
+            </div>
+        </div>
+    </div>
+    <!-- <<< Content -->
+</section>
+</body>
+</html>

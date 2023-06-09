@@ -34,16 +34,6 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("{dgUser}")
-    public ModelAndView editUser(@PathVariable DgUser dgUser) {
-        ModelAndView model = new ModelAndView("userEdit");
-        List<Role> allRoles = Arrays.asList(Role.values());
-        model.addObject("editableUser", dgUser);
-        model.addObject("rolesAll", allRoles);
-        return model;
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     public ModelAndView updateUser(ProfileForm profileForm,
             @RequestParam Map<String, String> form,
@@ -63,12 +53,22 @@ public class UserController {
         return new ModelAndView("redirect:/user");
     }
 
-    @GetMapping("profile")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/{dgUser}")
+    public ModelAndView editUser(@PathVariable DgUser dgUser) {
+        ModelAndView model = new ModelAndView("userEdit");
+        List<Role> allRoles = Arrays.asList(Role.values());
+        model.addObject("editableUser", dgUser);
+        model.addObject("rolesAll", allRoles);
+        return model;
+    }
+
+    @GetMapping("/profile")
     public ModelAndView getProfile() {
         return new ModelAndView("profile");
     }
 
-    @PostMapping("profile")
+    @PostMapping("/profile")
     public ModelAndView UpdateProfile(ProfileForm profileForm,
                                       @RequestParam("userId") DgUser dgUser) {
         dgUserService.updateProfile(profileForm, dgUser);

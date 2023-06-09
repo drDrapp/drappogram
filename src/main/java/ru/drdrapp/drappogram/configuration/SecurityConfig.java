@@ -46,7 +46,7 @@ public class SecurityConfig {
                                 "/activate/*",
                                 "/static/**").permitAll()
                         .requestMatchers(
-                                "/main/**").hasAnyAuthority("USER", "ADMIN")
+                                "/messages/**").hasAnyAuthority("USER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
