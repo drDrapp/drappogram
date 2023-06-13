@@ -14,10 +14,7 @@ import ru.drdrapp.drappogram.models.Role;
 import ru.drdrapp.drappogram.models.State;
 import ru.drdrapp.drappogram.repositories.DgUserRepository;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -34,7 +31,7 @@ public class DgUserService implements UserDetailsService {
         return new DgUserDetails(dgUserRepository.findByLogin(login).orElseThrow(IllegalArgumentException::new));
     }
 
-    public Boolean registerUser(DgUser dgUser) {
+    public Boolean registerDgUser(DgUser dgUser) {
         Optional<DgUser> dgUserCandidate = dgUserRepository.findByLogin(dgUser.getLogin());
         List<DgUser> dgUserCandidates = dgUserRepository.findByEmail(dgUser.getEmail());
         if (dgUserCandidate.isPresent() || (!dgUserCandidates.isEmpty())) {
@@ -65,7 +62,7 @@ public class DgUserService implements UserDetailsService {
         mailService.sendMail(dgUser.getEmail(), "Код активации для drappogram", message);
     }
 
-    public boolean activateUser(String code) {
+    public boolean activateDgUser(String code) {
         Optional<DgUser> dgUserCandidate = dgUserRepository.findByActivationCode(code);
         if (dgUserCandidate.isEmpty()) {
             return false;
@@ -81,7 +78,7 @@ public class DgUserService implements UserDetailsService {
         return dgUserRepository.findAll();
     }
 
-    public void saveUser(DgUser dgUser) {
+    public void saveDgUser(DgUser dgUser) {
         dgUserRepository.save(dgUser);
     }
 
@@ -125,17 +122,21 @@ public class DgUserService implements UserDetailsService {
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             Authentication newAuth = new UsernamePasswordAuthenticationToken(new DgUserDetails(dgUser), auth.getCredentials(), auth.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(newAuth);
-            saveUser(dgUser);
+            saveDgUser(dgUser);
         }
     }
 
     public void subscribe(DgUser currentDgUser, DgUser dgUser) {
-        dgUser.getSubscribers().add(currentDgUser);
+        List<DgUser> subList = getSubscribers(dgUser);
+        subList.add(currentDgUser);
+        dgUser.setSubscribers(Set.copyOf(subList));
         dgUserRepository.save(dgUser);
     }
 
     public void unsubscribe(DgUser currentDgUser, DgUser dgUser) {
-        dgUser.getSubscribers().remove(currentDgUser);
+        List<DgUser> subList = getSubscribers(dgUser);
+        subList.remove(currentDgUser);
+        dgUser.setSubscribers(Set.copyOf(subList));
         dgUserRepository.save(dgUser);
     }
 

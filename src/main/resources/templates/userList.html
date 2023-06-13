@@ -24,14 +24,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="_User : ${userList}">
-                    <th th:text="${_User.login}" scope="row"></th>
-                    <td th:text="${_User.firstName}"></td>
-                    <td th:text="${_User.lastName}"></td>
-                    <td th:text="${_User.state}"></td>
-                    <td th:text="${_User.roles}"></td>
-                    <td th:text="${_User.email}"></td>
-                    <td class="col"><a class="btn btn-outline-primary btn-sm" th:href="'/user/' + ${_User.id}">Редактировать</a>
+                <tr th:each="_user : ${userList}">
+                    <th scope="row">
+                        <a th:href="@{'/messages/user/' + ${_user.getId()}}" class="navbar-text">
+                            <span th:text="${_user.login}"></span>
+                        </a>
+                    </th>
+                    <td th:text="${_user.firstName}"></td>
+                    <td th:text="${_user.lastName}"></td>
+                    <td th:text="${_user.state}"></td>
+                    <td th:text="${_user.roles}"></td>
+                    <td th:text="${_user.email}"></td>
+                    <td class="col"><a class="btn btn-outline-primary btn-sm" th:href="'/user/' + ${_user.id}">Редактировать</a>
                     </td>
                 </tr>
                 </tbody>

@@ -51,7 +51,7 @@ public class RegistrationController {
                 model.addObject("message", "Пароли не совпадают!");
                 return model;
             }
-            if (dgUserService.registerUser(dgUser)) {
+            if (dgUserService.registerDgUser(dgUser)) {
                 model.setViewName("login");
                 model.addObject("message", "Регистрация прошла успешно!");
                 model.addObject("messageType", "success");
@@ -66,7 +66,7 @@ public class RegistrationController {
     @GetMapping("/activate/{code}")
     public ModelAndView activateUser(@PathVariable String code) {
         ModelAndView model = new ModelAndView("login");
-        if (dgUserService.activateUser(code)) {
+        if (dgUserService.activateDgUser(code)) {
             model.addObject("message", "Активация пользователя успешно завершена!");
             model.addObject("messageType", "success");
         } else {

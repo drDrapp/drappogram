@@ -51,7 +51,7 @@ public class UserController {
                 dgUser.getRoles().add(Role.valueOf(key));
             }
         }
-        dgUserService.saveUser(dgUser);
+        dgUserService.saveDgUser(dgUser);
         return new ModelAndView("redirect:/user");
     }
 
