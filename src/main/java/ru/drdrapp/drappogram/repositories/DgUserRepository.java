@@ -20,4 +20,12 @@ public interface DgUserRepository extends JpaRepository<DgUser, Long> {
     @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "dgUser_entity-graph")
     @Query("SELECT u FROM DgUser u WHERE u.id=?1")
     Optional<DgUser> getDgUserWithDgMessages(long id);
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "dgUser_entity-graph")
+    @Query("SELECT u FROM DgUser u WHERE ?1 MEMBER of u.subscribers")
+    List<DgUser> getSubscriptions(DgUser id);
+
+    @EntityGraph(type = EntityGraph.EntityGraphType.LOAD, value = "dgUser_entity-graph")
+    @Query("SELECT u FROM DgUser u WHERE ?1 MEMBER of u.subscriptions")
+    List<DgUser> getSubscribers(DgUser id);
 }

@@ -128,4 +128,27 @@ public class DgUserService implements UserDetailsService {
             saveUser(dgUser);
         }
     }
+
+    public void subscribe(DgUser currentDgUser, DgUser dgUser) {
+        dgUser.getSubscribers().add(currentDgUser);
+        dgUserRepository.save(dgUser);
+    }
+
+    public void unsubscribe(DgUser currentDgUser, DgUser dgUser) {
+        dgUser.getSubscribers().remove(currentDgUser);
+        dgUserRepository.save(dgUser);
+    }
+
+    public List<DgUser> getSubscriptions(DgUser dgUser){
+        return dgUserRepository.getSubscriptions(dgUser);
+    }
+
+    public List<DgUser> getSubscribers(DgUser dgUser){
+        return dgUserRepository.getSubscribers(dgUser);
+    }
+
+    public DgUser getDgUserWithDgMessages(long id){
+        return dgUserRepository.getDgUserWithDgMessages(id).orElse(null);
+    }
+
 }

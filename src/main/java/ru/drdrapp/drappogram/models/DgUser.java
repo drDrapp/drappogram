@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 @Getter
@@ -61,6 +62,22 @@ public class DgUser {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "dg_user_subscriptions",
+            joinColumns = { @JoinColumn(name = "channel_id") },
+            inverseJoinColumns = { @JoinColumn(name = "subscriber_id") }
+    )
+    private Set<DgUser> subscribers = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "dg_user_subscriptions",
+            joinColumns = { @JoinColumn(name = "subscriber_id") },
+            inverseJoinColumns = { @JoinColumn(name = "channel_id") }
+    )
+    private Set<DgUser> subscriptions = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {

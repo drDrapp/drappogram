@@ -6,11 +6,13 @@
 <section>
     <!-- Content >>> -->
     <div class="card my-2">
+
         <div class="card-header">
             <b><span th:text="'Редактирование пользователя: ' + ${#authentication.principal.dgUser.login}"></span></b>
             <span th:class="'base ' + ${#authentication.principal.dgUser.active == true ? 'badge text-bg-warning' : 'badge text-bg-secondary'}"
                   th:text="(${#authentication.principal.dgUser.active} == true) ? '(Активирован)' : '(Не активирован)'"></span>
         </div>
+
         <div class="card-body">
 
             <form method="post">
@@ -78,7 +80,6 @@
                         </button>
                     </div>
                 </div>
-
             </form>
 
         </div>

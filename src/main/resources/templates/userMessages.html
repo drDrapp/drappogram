@@ -1,27 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en"
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" lang="en"
       th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
 <head><title>title</title></head>
 <body>
 <section>
     <!-- Content >>> -->
     <div class="card my-2">
+
         <div class="card-header">
-            <b>Сообщения пользователя:
-                <span th:text="${#authentication.principal.getDgUser.login}"></span>
-            </b>
-        </div>
-        <div class="card-body">
-            <th:block th:if="${isCurrentUser}">
-                <div th:replace="~{fragments/partMessageEdit :: fr_messageEdit}"></div>
-            </th:block>
-            <div class="card-footer">
-                <b>Список сообщений</b>
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <b>Пользователь: <span th:text="${viewingDgUser.login}"></span></b>
+                </div>
+                <div class="col-auto">
+                    <a th:href="'/user/' + ${viewingDgUser.id} + '/subscriptions/list'">
+                        <div class="btn btn-outline-primary btn-sm position-relative">
+                            Подписки
+                            <span th:text="${subscriptionsCount}"
+                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <a th:href="'/user/' + ${viewingDgUser.id} + '/subscribers/list'">
+                        <div class="btn btn-outline-primary btn-sm position-relative">
+                            Подписчики
+                            <span th:text="${subscribersCount}"
+                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-auto" th:if="${!isCurrentUser}">
+                    <th:block th:switch="${isSubscriber}">
+                        <a th:case="true" class="btn btn-warning btn-sm"
+                           th:href="'/user/unsubscribeFrom/' + ${viewingDgUser.id}">Отписаться</a>
+                        <a th:case="false" class="btn btn-warning btn-sm"
+                           th:href="'/user/subscribeTo/'+ ${viewingDgUser.id}">Подписаться</a>
+                    </th:block>
+                </div>
             </div>
-            <div class="card-body">
-                <div th:replace="~{fragments/partMessages :: fr_messages}"></div>
-            </div>
         </div>
+
+        <th:block th:if="${showEditor}">
+            <th:block th:replace="~{fragments/partMessageEditor :: fr_messageEditor}"></th:block>
+        </th:block>
+        <th:block th:replace="~{fragments/partMessages :: fr_messages}"></th:block>
+
     </div>
     <!-- <<< Content -->
 </section>

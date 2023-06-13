@@ -6,10 +6,10 @@
 <section>
     <!--Content here >>>-->
     <th:block th:with="msgType=${messageType!=null?true:false}">
-    <div th:if="${message} != null"
-         th:text="${message}"
-         th:class="'alert alert-' + (${msgType}?'success':'danger') + ' my-2'"
-         role="alert"></div>
+        <div th:if="${message} != null"
+             th:text="${message}"
+             th:class="'alert alert-' + (${msgType}?'success':'danger') + ' my-2'"
+             role="alert"></div>
     </th:block>
     <section th:replace="~{fragments/partLogin :: fr_login ('/login', false)}"></section>
     <!--<<< Content here-->

@@ -68,6 +68,7 @@ public class RegistrationController {
         ModelAndView model = new ModelAndView("login");
         if (dgUserService.activateUser(code)) {
             model.addObject("message", "Активация пользователя успешно завершена!");
+            model.addObject("messageType", "success");
         } else {
             model.addObject("message", "Пользователь с таким кодом активации не найден!");
         }

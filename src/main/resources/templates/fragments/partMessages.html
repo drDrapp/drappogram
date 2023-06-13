@@ -3,40 +3,47 @@
 <head><title>title</title></head>
 <body>
 <!-- Fragment >>> -->
-<div th:fragment="fr_messages" class="row row-cols-1 row-cols-md-3 g-2">
-    <div th:each="_message : ${dgMessages}" class="col">
-        <div class="card">
-            <div class="card-body">
-                <img th:if="${_message.filename} != null"
-                     th:src="'/img/' + ${_message.filename}"
-                     width="150"
-                     class="img-thumbnail"
-                     alt=""
-                     src="">
-                <p th:text="${_message.text}" class="card-text"></p>
-                <div th:if="${!_message.tag.isEmpty()}" class="text-end">
-                    <div th:text="${_message.tag}" class="col-auto badge text-bg-secondary"></div>
-                </div>
-            </div>
-            <div class="card-footer text-muted">
-                <div class="row">
-                    <div class="col-auto">
-                        <a th:href="@{'/messages/user/' + ${_message.author.getId()}}" class="navbar-text">
-                            <span th:text="${_message.author.getLogin()}"></span>
-                        </a>
+<th:block th:fragment="fr_messages">
+    <div class="card-header align-items-start">
+        <b>Список сообщений</b>
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-1 row-cols-md-3 g-2">
+            <div th:each="_message : ${dgMessages}" class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <img th:if="${_message.filename} != null"
+                             th:src="'/img/' + ${_message.filename}"
+                             width="150"
+                             class="img-thumbnail"
+                             alt=""
+                             src="">
+                        <p th:text="${_message.text}" class="card-text"></p>
+                        <div th:if="${!_message.tag.isEmpty()}" class="text-end">
+                            <div th:text="${_message.tag}" class="col-auto badge text-bg-secondary"></div>
+                        </div>
                     </div>
-                    <div th:if="(${#authentication.principal.getDgUser.getId} == ${_message.author.getId()})"
-                         class="col text-end">
-                        <a th:href="@{'/messages/user/' + ${_message.author.getId()} + '?message=' + ${_message.id}}"
-                           class="navbar-text">
-                            <img src="/static/images/edit.png" height="16" width="16" alt="Редактировать"/>
-                        </a>
+                    <div class="card-footer text-muted">
+                        <div class="row">
+                            <div class="col-auto">
+                                <a th:href="@{'/messages/user/' + ${_message.author.getId()}}" class="navbar-text">
+                                    <span th:text="${_message.author.getLogin()}"></span>
+                                </a>
+                            </div>
+                            <div th:if="(${#authentication.principal.getDgUser.getId} == ${_message.author.getId()})"
+                                 class="col text-end">
+                                <a th:href="@{'/messages/user/' + ${_message.author.getId()} + '?message=' + ${_message.id}}"
+                                   class="navbar-text">
+                                    <img src="/static/images/edit.png" height="16" width="16" alt="Редактировать"/>
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</th:block>
 <!-- <<< Fragment -->
 </body>
 </html>

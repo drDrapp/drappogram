@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en"
+      th:replace="~{fragments/pageTemplate :: fr_page (~{::section})}">
+<head><title>title</title></head>
+<body>
+<section>
+    <!-- Content >>> -->
+    <div class="card my-2">
+
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-light active" aria-current="true">
+                <b><span th:switch="${type}">
+                        <span th:case="'subscriptions'">Подписки</span>
+                        <span th:case="'subscribers'">Подписчики</span>
+                    </span> пользователя: <span th:text="${viewingDgUser.login}"></span></b>
+            </a>
+            <th:block th:each="_user : ${subList}">
+                <li class="list-group-item">
+                    <a th:href="'/messages/user/' + ${_user.id}"
+                       class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <span th:text="${_user.login}"></span>
+                        <span th:text="${_user.getDgMessages().size()}" class="badge bg-warning rounded-pill"></span>
+                    </a>
+                </li>
+            </th:block>
+        </div>
+
+
+    </div>
+    <!-- <<< Content -->
+</section>
+</body>
+</html>

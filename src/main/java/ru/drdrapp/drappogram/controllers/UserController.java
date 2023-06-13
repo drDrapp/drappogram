@@ -2,6 +2,7 @@ package ru.drdrapp.drappogram.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.drdrapp.drappogram.froms.ProfileForm;
 import ru.drdrapp.drappogram.models.DgUser;
 import ru.drdrapp.drappogram.models.Role;
+import ru.drdrapp.drappogram.services.DgUserDetails;
 import ru.drdrapp.drappogram.services.DgUserService;
 
 import java.util.Arrays;
@@ -73,6 +75,40 @@ public class UserController {
                                       @RequestParam("userId") DgUser dgUser) {
         dgUserService.updateProfile(profileForm, dgUser);
         return new ModelAndView("redirect:/user/profile");
+    }
+
+    @GetMapping("subscribeTo/{dgUser}")
+    public String subscribe(
+            @AuthenticationPrincipal DgUserDetails dgUserDetails,
+            @PathVariable DgUser dgUser
+    ) {
+        dgUserService.subscribe(dgUserDetails.getDgUser(), dgUser);
+        return "redirect:/messages/user/" + dgUser.getId();
+    }
+
+    @GetMapping("unsubscribeFrom/{dgUser}")
+    public String unsubscribe(
+            @AuthenticationPrincipal DgUserDetails dgUserDetails,
+            @PathVariable DgUser dgUser
+    ) {
+        dgUserService.unsubscribe(dgUserDetails.getDgUser(), dgUser);
+        return "redirect:/messages/user/" + dgUser.getId();
+    }
+
+    @GetMapping("/{dgUser}/{type}/list")
+    public ModelAndView userList(
+            @PathVariable DgUser dgUser,
+            @PathVariable String type
+    ) {
+        ModelAndView model = new ModelAndView("subList");
+        model.addObject("viewingDgUser", dgUser);
+        model.addObject("type", type);
+        if ("subscriptions".equals(type)) {
+            model.addObject("subList", dgUserService.getSubscriptions(dgUser));
+        } else {
+            model.addObject("subList", dgUserService.getSubscribers(dgUser));
+        }
+        return model;
     }
 
 }

@@ -6,40 +6,11 @@
 <section>
     <!--Content here >>>-->
     <div class="card my-2">
-        <div class="card-header">
-            <b>Фильтр сообщений</b>
-        </div>
-        <div class="card-body">
-            <form th:action="@{/messages}" method="get">
-                <div class="row p-1 align-items-center">
-                    <div class="col-auto">
-                        <label for="inputTagFilter">Поиск по тегу</label>
-                    </div>
-                    <div class="col-auto">
-                        <input th:value="${tagFilter}"
-                               class="form-control"
-                               type="text"
-                               name="tagFilter"
-                               id="inputTagFilter"
-                               placeholder="Введите тег">
-                    </div>
-                    <div class="col-auto">
-                        <button type="submit"
-                                class="btn btn-warning">Найти
-                        </button>
-                    </div>
-                </div>
-            </form>
 
-            <div th:replace="~{fragments/partMessageEdit :: fr_messageEdit}"></div>
+        <th:block th:replace="~{fragments/partMessageFilter :: fr_messageFilter}"></th:block>
+        <th:block th:replace="~{fragments/partMessageEditor :: fr_messageEditor}"></th:block>
+        <th:block th:replace="~{fragments/partMessages :: fr_messages}"></th:block>
 
-            <div class="card-footer">
-                <b>Список сообщений</b>
-            </div>
-            <div class="card-body">
-                <div th:replace="~{fragments/partMessages :: fr_messages}"></div>
-            </div>
-        </div>
     </div>
     <!--<<< Content here-->
 </section>

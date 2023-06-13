@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head><title>title</title></head>
+<body>
+
+<!-- Fragment >>> -->
+<th:block th:fragment="fr_messageEditor">
+
+    <div class="card-footer">
+        <th:block th:if="${dgMessage != null}">
+            <b>Изменение сообщения</b>
+        </th:block>
+        <th:block th:if="${dgMessage == null}">
+            <div>
+                <a class="btn btn-warning btn-sm"
+                   data-bs-toggle="collapse"
+                   href="#collapseExample"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="collapseExample"><span
+                        th:text="${dgMessage == null ? 'Добавить сообщение' : 'Изменить сообщение'}"></span>
+                </a>
+            </div>
+        </th:block>
+
+        <div th:class="${dgMessage == null ? 'my-1 collapse' : 'my-1 collapse show'}" id="collapseExample">
+            <form method="post" enctype="multipart/form-data">
+                <div>
+                    <label for="inputMessageText"></label>
+                    <input class="form-control"
+                           type="text"
+                           name="text"
+                           id="inputMessageText"
+                           th:value="${dgMessage?.getText()}"
+                           placeholder="Введите сообщение"/>
+                    <th:block th:with="fieldError=${errorsMap?.get('textError')?:false}">
+                        <div th:if="${fieldError}"
+                             th:text="${fieldError}"
+                             class="alert alert-danger my-1 p-1"></div>
+                    </th:block>
+                </div>
+                <div>
+                    <label for="inputMessageTag"></label>
+                    <input class="form-control"
+                           type="text"
+                           name="tag"
+                           id="inputMessageTag"
+                           th:value="${dgMessage?.getTag()}"
+                           placeholder="Тег">
+                    <th:block th:with="fieldError=${errorsMap?.get('tagError')?:false}">
+                        <div th:if="${fieldError}"
+                             th:text="${fieldError}"
+                             class="alert alert-danger my-1 p-1"></div>
+                    </th:block>
+                </div>
+                <div class="mb-4">
+                    <label for="inputMessageFile"></label>
+                    <input class="form-control"
+                           type="file"
+                           name="messageFile"
+                           id="inputMessageFile"
+                           placeholder="Файл с изображением">
+                </div>
+                <input type="hidden" name="id" th:value="${dgMessage?.id?:'0'}"/>
+                <div>
+                    <button type="submit"
+                            class="btn btn-warning btn-sm">
+                        Сохранить
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</th:block>
+<!-- <<< Fragment -->
+</body>
+</html>

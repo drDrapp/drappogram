@@ -2,10 +2,8 @@ package ru.drdrapp.drappogram.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,35 +11,26 @@ import org.springframework.web.servlet.ModelAndView;
 import ru.drdrapp.drappogram.Utils.DgUtils;
 import ru.drdrapp.drappogram.models.DgMessage;
 import ru.drdrapp.drappogram.models.DgUser;
-import ru.drdrapp.drappogram.repositories.DgMessageRepository;
-import ru.drdrapp.drappogram.repositories.DgUserRepository;
+import ru.drdrapp.drappogram.services.DgMessageService;
 import ru.drdrapp.drappogram.services.DgUserDetails;
+import ru.drdrapp.drappogram.services.DgUserService;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/messages")
 @RequiredArgsConstructor
 public class MessageController {
 
-    private final DgMessageRepository dgMessageRepository;
-
-    @Value("${upload.path}")
-    private String uploadPath;
-    private final DgUserRepository dgUserRepository;
+    private final DgMessageService dgMessageService;
+    private final DgUserService dgUserService;
 
     @GetMapping()
     public ModelAndView getAllMessages(@RequestParam(required = false, defaultValue = "") String tagFilter) {
         ModelAndView model = new ModelAndView("messages");
-        List<DgMessage> dgMessages;
-        if (tagFilter != null && !tagFilter.isEmpty()) {
-            dgMessages = dgMessageRepository.findByTag(tagFilter);
-        } else {
-            dgMessages = dgMessageRepository.findAll();
-        }
-        model.addObject("dgMessages", dgMessages);
+        model.addObject("dgMessages", dgMessageService.getDgMessagesByFilter(tagFilter));
         model.addObject("tagFilter", tagFilter);
         return model;
     }
@@ -58,29 +47,13 @@ public class MessageController {
             model.addObject("errorsMap", errorsMap);
             model.addObject("dgMessage", dgMessage);
         } else {
-            saveMessageFile(dgMessage, messageFile);
+            dgMessageService.saveDgMessageFile(dgMessage, messageFile);
             model.addObject("dgMessage", null);
-            dgMessageRepository.save(dgMessage);
+            dgMessageService.saveDgMessage(dgMessage);
         }
-        List<DgMessage> dgMessages;
-        dgMessages = dgMessageRepository.findAll();
+        List<DgMessage> dgMessages = dgMessageService.getListDgMessage();
         model.addObject("dgMessages", dgMessages);
         return model;
-    }
-
-    private void saveMessageFile(@Valid DgMessage dgMessage, @RequestParam MultipartFile messageFile) throws IOException {
-        if (messageFile != null && !Objects.requireNonNull(messageFile.getOriginalFilename()).isEmpty()) {
-            File uploadDir = new File(uploadPath);
-            if (!uploadDir.exists()) {
-                boolean wasFileSystemOperationResult = uploadDir.mkdir();
-                if (!wasFileSystemOperationResult) {
-                    System.out.println("Ошибка создания директории!");
-                }
-            }
-            String resultFilename = UUID.randomUUID() + "." + messageFile.getOriginalFilename();
-            messageFile.transferTo(new File(uploadPath + "/" + resultFilename));
-            dgMessage.setFilename(resultFilename);
-        }
     }
 
     @GetMapping("/user/{dgUser}")
@@ -89,33 +62,30 @@ public class MessageController {
                                      @RequestParam(required = false) DgMessage message
     ) {
         ModelAndView model = new ModelAndView("userMessages");
-        Optional<DgUser> dgUserWithMessagesMessages = dgUserRepository.getDgUserWithDgMessages(dgUser.getId());
-        model.addObject("dgMessages", dgUserWithMessagesMessages.get().getDgMessages());
+        DgUser viewingDgUser = dgUserService.getDgUserWithDgMessages(dgUser.getId());
+        model.addObject("viewingDgUser", viewingDgUser);
+        if (viewingDgUser != null) {
+            model.addObject("dgMessages", viewingDgUser.getDgMessages());
+        }
+        model.addObject("subscriptionsCount", dgUserService.getSubscriptions(dgUser).size());
+        model.addObject("subscribersCount", dgUserService.getSubscribers(dgUser).size());
+        model.addObject("isSubscriber", dgUserService.getSubscribers(dgUser).contains(dgUserDetails.getDgUser()));
         model.addObject("dgMessage", message);
         model.addObject("isCurrentUser", dgUserDetails.getDgUser().equals(dgUser));
+        model.addObject("showEditor", dgUserDetails.getDgUser().equals(dgUser) && (message != null));
         return model;
     }
 
-    @PostMapping("/user/{dgUser}")
-    public String updateMessage(@AuthenticationPrincipal DgUserDetails dgUserDetails,
-                                @PathVariable Long dgUser,
-                                @RequestParam("message") DgMessage message,
-                                @RequestParam("text") String text,
-                                @RequestParam("tag") String tag,
-                                @RequestParam("messageFile") MultipartFile messageFile
+    @PostMapping("/user/{userId}")
+    public ModelAndView updateMessage(@AuthenticationPrincipal DgUserDetails dgUserDetails,
+                                      @PathVariable Long userId,
+                                      @RequestParam("id") DgMessage dgMessage,
+                                      @RequestParam("text") String text,
+                                      @RequestParam("tag") String tag,
+                                      @RequestParam("messageFile") MultipartFile messageFile
     ) throws IOException {
-        if (message.getAuthor().equals(dgUserDetails.getDgUser())) {
-            if (StringUtils.hasLength(text)) {
-                message.setText(text);
-            }
-            if (StringUtils.hasLength(tag)) {
-                message.setTag(tag);
-            }
-            saveMessageFile(message, messageFile);
-            dgMessageRepository.save(message);
-        }
-
-        return "redirect:/messages/user/" + dgUser;
+        dgMessageService.updateDgMessage(dgUserDetails, dgMessage, text, tag, messageFile);
+        return new ModelAndView("redirect:/messages/user/" + userId);
     }
 
 }
