@@ -8,9 +8,9 @@
         <b>Список сообщений</b>
     </div>
     <div class="card-body">
-        <div class="row row-cols-1 row-cols-md-3 g-2">
+        <div class="row row-cols-1 row-cols-md-3 g-2" id="messagesCards">
             <div th:each="_message : ${dgMessages}" class="col">
-                <div class="card">
+                <div class="card" th:attr="data-id=${_message.id}">
                     <div class="card-body">
                         <img th:if="${_message.filename} != null"
                              th:src="'/img/' + ${_message.filename}"

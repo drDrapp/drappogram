@@ -1,6 +1,7 @@
 package ru.drdrapp.drappogram.services;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,6 +26,8 @@ public class DgUserService implements UserDetailsService {
     private final DgUserRepository dgUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final MailService mailService;
+    @Value("${hostname}")
+    private String hostname;
 
     @Override
     public DgUserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -55,8 +58,9 @@ public class DgUserService implements UserDetailsService {
                 """
                         Привет, %s!\s
                         Добро пожаловать в drappogram!\s
-                        Ссылка для активации: http://localhost:8080/activate/%s""",
+                        Ссылка для активации: http://%s/activate/%s""",
                 dgUser.getLogin(),
+                hostname,
                 dgUser.getActivationCode()
         );
         mailService.sendMail(dgUser.getEmail(), "Код активации для drappogram", message);

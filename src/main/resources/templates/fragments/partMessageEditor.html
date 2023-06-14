@@ -17,8 +17,8 @@
                    href="#collapseExample"
                    role="button"
                    aria-expanded="false"
-                   aria-controls="collapseExample"><span
-                        th:text="${dgMessage == null ? 'Добавить сообщение' : 'Изменить сообщение'}"></span>
+                   aria-controls="collapseExample">
+                    <span th:text="${dgMessage == null ? 'Добавить сообщение' : 'Изменить сообщение'}"></span>
                 </a>
             </div>
         </th:block>
@@ -32,7 +32,7 @@
                            name="text"
                            id="inputMessageText"
                            th:value="${dgMessage?.getText()}"
-                           placeholder="Введите сообщение"/>
+                           placeholder="Введите сообщение" />
                     <th:block th:with="fieldError=${errorsMap?.get('textError')?:false}">
                         <div th:if="${fieldError}"
                              th:text="${fieldError}"
@@ -46,7 +46,7 @@
                            name="tag"
                            id="inputMessageTag"
                            th:value="${dgMessage?.getTag()}"
-                           placeholder="Тег">
+                           placeholder="Тег" />
                     <th:block th:with="fieldError=${errorsMap?.get('tagError')?:false}">
                         <div th:if="${fieldError}"
                              th:text="${fieldError}"
@@ -59,9 +59,9 @@
                            type="file"
                            name="messageFile"
                            id="inputMessageFile"
-                           placeholder="Файл с изображением">
+                           placeholder="Файл с изображением" />
                 </div>
-                <input type="hidden" name="id" th:value="${dgMessage?.id?:'0'}"/>
+                <input type="hidden" name="id" th:value="${dgMessage?.id?:'0'}" />
                 <div>
                     <button type="submit"
                             class="btn btn-warning btn-sm">

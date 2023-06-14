@@ -38,7 +38,7 @@
             </div>
 
             <div sec:authorize="isAuthenticated()" class="navbar-text ms-3">
-                <a href="/user/profile">
+                <a href="/user/profile" id="loggedUserName">
                     <span sec:authentication="name"></span>
                 </a>
             </div>
