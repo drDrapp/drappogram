@@ -55,26 +55,26 @@
     <nav aria-label="Pagination" th:if="${totalPages > 0}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a th:replace="fragments/partPager :: paging(1, '<<', 'Первая страница')"></a>
+                <a th:replace="fragments/partPagerLink :: fr_pagerLink(1, '<<', 'Первая страница')"></a>
             </li>
             <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a th:replace="fragments/partPager :: paging(${currentPage - 1}, 'Предыдущая', 'Предыдущая страница')"></a>
+                <a th:replace="fragments/partPagerLink :: fr_pagerLink(${currentPage - 1}, 'Предыдущая', 'Предыдущая страница')"></a>
             </li>
             <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
                 <a class="page-link" href="#">...</a>
             </li>
             <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
                 th:each="page : ${#numbers.sequence( ( ( currentPage > 2 ) ? ( currentPage - 2 ) : 1 ), ( ( currentPage + 2 ) < totalPages ? ( currentPage + 2 ) : totalPages ) )}">
-                <a th:replace="fragments/partPager :: paging(${page}, ${page}, 'Страница ' + ${page})"></a>
+                <a th:replace="fragments/partPagerLink :: fr_pagerLink(${page}, ${page}, 'Страница ' + ${page})"></a>
             </li>
             <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
                 <a class="page-link" href="#">...</a>
             </li>
             <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a th:replace="fragments/partPager :: paging(${currentPage + 1},'Следующая', 'Следующая страница')"></a>
+                <a th:replace="fragments/partPagerLink :: fr_pagerLink(${currentPage + 1},'Следующая', 'Следующая страница')"></a>
             </li>
             <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a th:replace="fragments/partPager :: paging(${totalPages}, '>>', 'Последняя страница')"></a>
+                <a th:replace="fragments/partPagerLink :: fr_pagerLink(${totalPages}, '>>', 'Последняя страница')"></a>
             </li>
         </ul>
     </nav>

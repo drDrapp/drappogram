@@ -4,7 +4,7 @@
 <body>
 
 <!-- Fragment >>> -->
-<a th:fragment="paging(pageNum, label, tooltip)"
+<a th:fragment="fr_pagerLink(pageNum, label, tooltip)"
    th:class="page-link"
    th:href="@{'/messages?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
    th:title="${tooltip}"
