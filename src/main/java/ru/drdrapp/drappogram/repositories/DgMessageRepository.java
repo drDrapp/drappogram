@@ -1,12 +1,13 @@
 package ru.drdrapp.drappogram.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.drdrapp.drappogram.models.DgMessage;
 
-import java.util.List;
-
 @Transactional(readOnly = true)
 public interface DgMessageRepository extends JpaRepository<DgMessage, Integer> {
-    List<DgMessage> findByTag(String tag);
+    Page<DgMessage> findAll(Pageable pageable);
+    Page<DgMessage> findByTag(String tag, org.springframework.data.domain.Pageable pageable);
 }

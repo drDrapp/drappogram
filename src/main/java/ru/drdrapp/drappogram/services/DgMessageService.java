@@ -2,6 +2,8 @@ package ru.drdrapp.drappogram.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +27,13 @@ public class DgMessageService {
     @Value("${upload.path}")
     private String uploadPath;
 
-    public List<DgMessage> getDgMessagesByFilter(String tagFilter) {
-        List<DgMessage> dgMessages;
+    public Page<DgMessage> getDgMessagesByFilter(String tagFilter,
+                                                 Pageable pageable) {
+        Page<DgMessage> dgMessages;
         if (tagFilter != null && !tagFilter.isEmpty()) {
-            dgMessages = dgMessageRepository.findByTag(tagFilter);
+            dgMessages = dgMessageRepository.findByTag(tagFilter, pageable);
         } else {
-            dgMessages = dgMessageRepository.findAll();
+            dgMessages = dgMessageRepository.findAll(pageable);
         }
         return dgMessages;
     }

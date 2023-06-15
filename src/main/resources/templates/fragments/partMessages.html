@@ -8,41 +8,77 @@
         <b>Список сообщений</b>
     </div>
     <div class="card-body">
-        <div class="row row-cols-1 row-cols-md-3 g-2" id="messagesCards">
-            <div th:each="_message : ${dgMessages}" class="col">
-                <div class="card" th:attr="data-id=${_message.id}">
-                    <div class="card-body">
-                        <img th:if="${_message.filename} != null"
-                             th:src="'/img/' + ${_message.filename}"
-                             width="150"
-                             class="img-thumbnail"
-                             alt=""
-                             src="">
-                        <p th:text="${_message.text}" class="card-text"></p>
-                        <div th:if="${!_message.tag.isEmpty()}" class="text-end">
-                            <div th:text="${_message.tag}" class="col-auto badge text-bg-secondary"></div>
-                        </div>
-                    </div>
-                    <div class="card-footer text-muted">
-                        <div class="row">
-                            <div class="col-auto">
-                                <a th:href="@{'/messages/user/' + ${_message.author.getId()}}" class="navbar-text">
-                                    <span th:text="${_message.author.getLogin()}"></span>
-                                </a>
+
+        <th:block th:if="${dgMessages.size() > 0}">
+            <div class="row row-cols-1 row-cols-md-3 g-2" id="messagesCards">
+                <div th:each="_message : ${dgMessages}" class="col">
+                    <div class="card" th:attr="data-id=${_message.id}">
+                        <div class="card-body">
+                            <img th:if="${_message.filename} != null"
+                                 th:src="'/img/' + ${_message.filename}"
+                                 width="150"
+                                 class="img-thumbnail"
+                                 alt=""
+                                 src="">
+                            <p th:text="${_message.text}" class="card-text"></p>
+                            <div th:if="${!_message.tag.isEmpty()}" class="text-end">
+                                <div th:text="${_message.tag}" class="col-auto badge text-bg-secondary"></div>
                             </div>
-                            <div th:if="(${#authentication.principal.getDgUser.getId} == ${_message.author.getId()})"
-                                 class="col text-end">
-                                <a th:href="@{'/messages/user/' + ${_message.author.getId()} + '?message=' + ${_message.id}}"
-                                   class="navbar-text">
-                                    <img src="/static/images/edit.png" height="16" width="16" alt="Редактировать"/>
-                                </a>
+                        </div>
+                        <div class="card-footer text-muted">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <a th:href="@{'/messages/user/' + ${_message.author.getId()}}" class="navbar-text">
+                                        <span th:text="${_message.author.getLogin()}"></span>
+                                    </a>
+                                </div>
+                                <div th:if="(${#authentication.principal.getDgUser.getId} == ${_message.author.getId()})"
+                                     class="col text-end">
+                                    <a th:href="@{'/messages/user/' + ${_message.author.getId()} + '?message=' + ${_message.id}}"
+                                       class="navbar-text">
+                                        <img src="/static/images/edit.png" height="16" width="16" alt="Редактировать"/>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </th:block>
+
+        <th:block th:unless="${dgMessages.size() > 0}">
+            <span>Сообщения отсутствуют!</span>
+        </th:block>
+
     </div>
+
+    <nav aria-label="Pagination" th:if="${totalPages > 0}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/partPager :: paging(1, '<<', 'Первая страница')"></a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+                <a th:replace="fragments/partPager :: paging(${currentPage - 1}, 'Предыдущая', 'Предыдущая страница')"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+                th:each="page : ${#numbers.sequence( ( ( currentPage > 2 ) ? ( currentPage - 2 ) : 1 ), ( ( currentPage + 2 ) < totalPages ? ( currentPage + 2 ) : totalPages ) )}">
+                <a th:replace="fragments/partPager :: paging(${page}, ${page}, 'Страница ' + ${page})"></a>
+            </li>
+            <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+                <a class="page-link" href="#">...</a>
+            </li>
+            <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/partPager :: paging(${currentPage + 1},'Следующая', 'Следующая страница')"></a>
+            </li>
+            <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+                <a th:replace="fragments/partPager :: paging(${totalPages}, '>>', 'Последняя страница')"></a>
+            </li>
+        </ul>
+    </nav>
+
 </th:block>
 <!-- <<< Fragment -->
 </body>

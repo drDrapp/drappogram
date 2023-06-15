@@ -2,6 +2,9 @@ package ru.drdrapp.drappogram.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -28,10 +31,22 @@ public class MessageController {
     private final DgUserService dgUserService;
 
     @GetMapping()
-    public ModelAndView getAllMessages(@RequestParam(required = false, defaultValue = "") String tagFilter) {
+    public ModelAndView getAllMessages(@RequestParam(required = false, defaultValue = "") String tagFilter,
+                                       @RequestParam(defaultValue = "1") int page,
+                                       @RequestParam(defaultValue = "6") int size){
         ModelAndView model = new ModelAndView("messages");
-        model.addObject("dgMessages", dgMessageService.getDgMessagesByFilter(tagFilter));
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<DgMessage> dgMessages = dgMessageService.getDgMessagesByFilter(tagFilter, pageable);
+
+        model.addObject("dgMessages", dgMessages.getContent());
         model.addObject("tagFilter", tagFilter);
+
+        model.addObject("currentPage", dgMessages.getNumber() + 1);
+        model.addObject("totalItems", dgMessages.getTotalElements());
+        model.addObject("totalPages", dgMessages.getTotalPages());
+        model.addObject("pageSize", size);
+
         return model;
     }
 

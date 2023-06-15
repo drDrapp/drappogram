@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head><title>title</title></head>
+<body>
+
+<!-- Fragment >>> -->
+<a th:fragment="paging(pageNum, label, tooltip)"
+   th:class="page-link"
+   th:href="@{'/messages?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
+   th:title="${tooltip}"
+   rel="tooltip">
+    [[${label}]]
+</a>
+<!-- <<< Fragment -->
+
+</body>
+</html>

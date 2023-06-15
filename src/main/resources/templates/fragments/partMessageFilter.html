@@ -5,24 +5,22 @@
 
 <!-- Fragment >>> -->
 <th:block th:fragment="fr_messageFilter">
-
     <div class="card-header">
         <b>Фильтр сообщений</b>
     </div>
-
     <div class="card-body">
-        <form th:action="@{/messages}" method="get">
+        <form th:action="@{/messages}" method="get" id="formFilter">
             <div class="row p-1 align-items-center">
                 <div class="col-auto">
                     <label for="inputTagFilter">Поиск по тегу</label>
                 </div>
-                <div class="col-auto">
+                <div class="col-2">
                     <input th:value="${tagFilter}"
                            class="form-control"
                            type="text"
                            name="tagFilter"
                            id="inputTagFilter"
-                           placeholder="Введите тег" />
+                           placeholder="Введите тег"/>
                 </div>
                 <div class="col-auto">
                     <button type="submit"
@@ -30,9 +28,27 @@
                     </button>
                 </div>
             </div>
+            <div class="row p-1 align-items-center">
+                <div class="col-auto">
+                        <label for="pageSize">Выводить сообщений на странице:</label>
+                    </div>
+                <div class="col-2">
+                    <select form="formFilter"
+                            name="size"
+                            th:value="${pageSize}"
+                            onchange="this.form.submit()"
+                            class="form-select"
+                            id="pageSize">
+                        <option th:each="s : ${#numbers.sequence(3, 12, 3)}"
+                                th:value="${s}"
+                                th:text="${s}"
+                                th:selected="${s == pageSize}">
+                        </option>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
-
 </th:block>
 <!-- <<< Fragment -->
 
