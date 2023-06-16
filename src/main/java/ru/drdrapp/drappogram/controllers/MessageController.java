@@ -74,20 +74,27 @@ public class MessageController {
     @GetMapping("/user/{dgUser}")
     public ModelAndView userMessages(@AuthenticationPrincipal DgUserDetails dgUserDetails,
                                      @PathVariable DgUser dgUser,
+                                     @RequestParam(defaultValue = "1") int page,
+                                     @RequestParam(defaultValue = "6") int size,
                                      @RequestParam(required = false) DgMessage message
     ) {
         ModelAndView model = new ModelAndView("userMessages");
-        DgUser viewingDgUser = dgUserService.getDgUserWithDgMessages(dgUser.getId());
-        model.addObject("viewingDgUser", viewingDgUser);
-        if (viewingDgUser != null) {
-            model.addObject("dgMessages", viewingDgUser.getDgMessages());
-        }
+        model.addObject("viewingDgUser", dgUser);
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<DgMessage> dgMessages = dgMessageService.getDgMessagesByAuthorId(dgUser.getId(), "", pageable);
+        model.addObject("dgMessages", dgMessages.getContent());
+        model.addObject("currentPage", dgMessages.getNumber() + 1);
+        model.addObject("totalItems", dgMessages.getTotalElements());
+        model.addObject("totalPages", dgMessages.getTotalPages());
+        model.addObject("pageSize", size);
+
         model.addObject("subscriptionsCount", dgUserService.getSubscriptions(dgUser).size());
         model.addObject("subscribersCount", dgUserService.getSubscribers(dgUser).size());
         model.addObject("isSubscriber", dgUserService.getSubscribers(dgUser).contains(dgUserDetails.getDgUser()));
         model.addObject("dgMessage", message);
         model.addObject("isCurrentUser", dgUserDetails.getDgUser().equals(dgUser));
         model.addObject("showEditor", dgUserDetails.getDgUser().equals(dgUser) && (message != null));
+
         return model;
     }
 

@@ -9,5 +9,7 @@ import ru.drdrapp.drappogram.models.DgMessage;
 @Transactional(readOnly = true)
 public interface DgMessageRepository extends JpaRepository<DgMessage, Integer> {
     Page<DgMessage> findAll(Pageable pageable);
-    Page<DgMessage> findByTag(String tag, org.springframework.data.domain.Pageable pageable);
+    Page<DgMessage> findByTag(String tag, Pageable pageable);
+    Page<DgMessage> findByAuthor_Id(long authorId, Pageable pageable);
+    Page<DgMessage> findByAuthor_IdAndTag(long authorId, String tag, Pageable pageable);
 }

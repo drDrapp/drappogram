@@ -6,7 +6,6 @@
 <section>
     <!-- Content >>> -->
     <div class="card my-2">
-
         <div class="card-header">
             <div class="row align-items-center">
                 <div class="col-auto">
@@ -44,12 +43,11 @@
                 </div>
             </div>
         </div>
-
         <th:block th:if="${showEditor}">
             <th:block th:replace="~{fragments/partMessageEditor :: fr_messageEditor}"></th:block>
         </th:block>
         <th:block th:replace="~{fragments/partMessages :: fr_messages}"></th:block>
-
+        <th:block th:replace="~{fragments/partPager :: fr_pager('/messages/user/' + ${viewingDgUser.id})}"></th:block>
     </div>
     <!-- <<< Content -->
 </section>

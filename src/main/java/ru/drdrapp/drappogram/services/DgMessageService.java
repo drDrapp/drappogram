@@ -38,6 +38,18 @@ public class DgMessageService {
         return dgMessages;
     }
 
+    public Page<DgMessage> getDgMessagesByAuthorId(long authorId,
+                                                   String tagFilter,
+                                                   Pageable pageable) {
+        Page<DgMessage> dgMessages;
+        if (tagFilter != null && !tagFilter.isEmpty()) {
+            dgMessages = dgMessageRepository.findByAuthor_IdAndTag(authorId, tagFilter, pageable);
+        } else {
+            dgMessages = dgMessageRepository.findByAuthor_Id(authorId, pageable);
+        }
+        return dgMessages;
+    }
+
     public void saveDgMessageFile(DgMessage dgMessage,
                                   MultipartFile messageFile) throws IOException {
         if (messageFile != null && !Objects.requireNonNull(messageFile.getOriginalFilename()).isEmpty()) {
